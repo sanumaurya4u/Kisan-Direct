@@ -5,6 +5,8 @@ import { Home } from './pages/public/Home';
 import { Login } from './pages/auth/Login';
 import { Register } from './pages/auth/Register';
 import { FarmerDashboard } from './pages/farmer/FarmerDashboard';
+import { FarmerProduce } from './pages/farmer/FarmerProduce';
+import { SellSmart } from './pages/farmer/SellSmart';
 import { ListingForm } from './pages/farmer/ListingForm';
 import { FPODashboard } from './pages/fpo/FPODashboard';
 import { BuyerDashboard } from './pages/buyer/BuyerDashboard';
@@ -14,8 +16,10 @@ import { MatchesView } from './pages/buyer/MatchesView';
 import { BuyerOrders } from './pages/buyer/BuyerOrders';
 import { FarmerOrders } from './pages/farmer/FarmerOrders';
 import { LogisticsDashboard } from './pages/logistics/LogisticsDashboard';
+import { RouteOptimizationView } from './pages/logistics/RouteOptimizationView';
 import { AnalyticsDashboard } from './pages/analytics/AnalyticsDashboard';
 import { AdminDashboard } from './pages/admin/AdminDashboard';
+import { ProfilePage } from './pages/profile/ProfilePage';
 import { About } from './pages/public/About';
 import { AuthProvider } from './features/auth/AuthContext';
 
@@ -24,40 +28,61 @@ function App() {
     <AuthProvider>
       <Routes>
         <Route path="/" element={<BaseLayout />}>
+          {/* Public Routes */}
           <Route index element={<Home />} />
           <Route path="login" element={<Login />} />
           <Route path="register" element={<Register />} />
           <Route path="marketplace" element={<Marketplace />} />
           <Route path="about" element={<About />} />
-          
-          <Route element={<ProtectedRoute allowedRoles={['farmer']} />}>
+
+          {/* Farmer Routes */}
+          <Route element={<ProtectedRoute allowedRoles={['farmer', 'fpo']} />}>
             <Route path="farmer/dashboard" element={<FarmerDashboard />} />
+            <Route path="farmer/produce" element={<FarmerProduce />} />
+            <Route path="farmer/sell-smart" element={<SellSmart />} />
             <Route path="farmer/dashboard/listings/new" element={<ListingForm />} />
             <Route path="farmer/dashboard/listings/:id/edit" element={<ListingForm />} />
             <Route path="farmer/orders" element={<FarmerOrders />} />
           </Route>
+
+          {/* FPO Specific Routes */}
           <Route element={<ProtectedRoute allowedRoles={['fpo']} />}>
             <Route path="fpo/dashboard" element={<FPODashboard />} />
             <Route path="fpo/dashboard/listings/new" element={<ListingForm />} />
             <Route path="fpo/dashboard/listings/:id/edit" element={<ListingForm />} />
             <Route path="fpo/orders" element={<FarmerOrders />} />
           </Route>
-          <Route element={<ProtectedRoute allowedRoles={['bulk_buyer']} />}>
+
+          {/* Bulk Buyer & Consumer Orders Routes */}
+          <Route element={<ProtectedRoute allowedRoles={['bulk_buyer', 'admin']} />}>
             <Route path="buyer/dashboard" element={<BuyerDashboard />} />
-            <Route path="buyer/orders" element={<BuyerOrders />} />
             <Route path="buyer/dashboard/requirements/new" element={<RequirementForm />} />
             <Route path="buyer/dashboard/requirements/:id/edit" element={<RequirementForm />} />
             <Route path="buyer/dashboard/requirements/:id/matches" element={<MatchesView />} />
           </Route>
-          <Route element={<ProtectedRoute allowedRoles={['logistics_partner']} />}>
-            <Route path="logistics/dashboard" element={<LogisticsDashboard />} />
+          <Route element={<ProtectedRoute allowedRoles={['bulk_buyer', 'consumer', 'admin']} />}>
+            <Route path="buyer/orders" element={<BuyerOrders />} />
           </Route>
-          
-          <Route element={<ProtectedRoute allowedRoles={['farmer', 'fpo', 'bulk_buyer', 'admin']} />}>
+
+          {/* Logistics & Fleet Tracking Routes */}
+          <Route element={<ProtectedRoute allowedRoles={['logistics_partner', 'admin', 'farmer', 'fpo', 'bulk_buyer']} />}>
+            <Route path="logistics/dashboard" element={<LogisticsDashboard />} />
+            <Route path="logistics/routes" element={<RouteOptimizationView />} />
+          </Route>
+
+          {/* Analytics & Forecasting */}
+          <Route element={<ProtectedRoute allowedRoles={['farmer', 'fpo', 'bulk_buyer', 'admin', 'logistics_partner']} />}>
             <Route path="analytics" element={<AnalyticsDashboard />} />
           </Route>
+
+          {/* Platform Administrator */}
           <Route element={<ProtectedRoute allowedRoles={['admin']} />}>
             <Route path="admin/dashboard" element={<AdminDashboard />} />
+          </Route>
+
+          {/* User Profile for All Authenticated Personas */}
+          <Route element={<ProtectedRoute allowedRoles={['farmer', 'fpo', 'bulk_buyer', 'logistics_partner', 'admin', 'consumer']} />}>
+            <Route path="profile" element={<ProfilePage />} />
           </Route>
         </Route>
       </Routes>

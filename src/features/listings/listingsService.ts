@@ -80,6 +80,14 @@ export const listingsService = {
     return data as Listing;
   },
 
+  async deleteListing(id: string) {
+    const { error } = await supabase
+      .from('listings')
+      .delete()
+      .eq('id', id);
+    if (error) throw error;
+  },
+
   async uploadImage(file: File) {
     const fileExt = file.name.split('.').pop();
     const fileName = `${Math.random()}.${fileExt}`;
