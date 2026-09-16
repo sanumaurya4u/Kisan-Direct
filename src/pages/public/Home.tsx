@@ -37,10 +37,7 @@ export function Home() {
         <div className="absolute bottom-0 left-0 -mb-12 -ml-12 w-96 h-96 rounded-full bg-emerald-400/10 blur-2xl pointer-events-none" />
 
         <div className="relative max-w-4xl mx-auto text-center space-y-6">
-          <div className="inline-flex items-center space-x-2 bg-white/10 backdrop-blur-md px-4 py-1.5 rounded-full border border-white/20 text-xs font-semibold tracking-wide text-primary-light">
-            <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-            <span>Smart India Hackathon 2026 Prototype — Problem Statement #26033</span>
-          </div>
+
 
           <h1 className="text-4xl md:text-6xl font-extrabold tracking-tight leading-tight">
             From Farm to Market, <br className="hidden sm:inline" />

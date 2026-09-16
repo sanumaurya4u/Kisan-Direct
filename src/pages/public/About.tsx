@@ -43,10 +43,7 @@ export function About() {
         </Link>
       </div>
 
-      <div className="mt-16 text-center text-sm text-gray-400">
-        <p>Built for Smart India Hackathon 2026 | Problem Statement #26033</p>
-        <p>Ministry of Consumer Affairs, Food & Public Distribution</p>
-      </div>
+
     </div>
   );
 }
