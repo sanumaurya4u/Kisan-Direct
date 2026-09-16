@@ -134,7 +134,7 @@ export function Login() {
 
   return (
     <div className="max-w-5xl mx-auto py-6 px-4">
-      {/* SIH Hackathon Demo Quick Switcher Banner */}
+      {/* Demo Quick Switcher Banner */}
       <div className="mb-8 bg-gradient-to-r from-green-50 via-emerald-50 to-amber-50 border border-green-200 rounded-2xl p-6 shadow-sm">
         <div className="flex items-center justify-between flex-wrap gap-2 mb-4">
           <div className="flex items-center space-x-2">
@@ -143,7 +143,7 @@ export function Login() {
             </span>
             <div>
               <h2 className="text-xl font-bold text-gray-900 flex items-center gap-2">
-                1-Click SIH 2026 Demo Access
+                1-Click Demo Access
                 <Badge variant="success" className="text-xs font-normal">Pre-Seeded Dataset</Badge>
               </h2>
               <p className="text-sm text-gray-600">

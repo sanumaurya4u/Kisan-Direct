@@ -164,7 +164,7 @@ export function Home() {
           {/* The Problem */}
           <div className="bg-red-50/50 border border-red-200 rounded-2xl p-6 md:p-8">
             <div className="inline-flex items-center space-x-1.5 bg-red-100 text-red-800 text-xs font-bold px-2.5 py-1 rounded-full mb-4">
-              <span>Current Problem (SIH Problem #26033)</span>
+              <span>Current Problem</span>
             </div>
             <h3 className="text-xl font-bold text-gray-900 mb-3">The Middleman Trap in Agriculture</h3>
             <ul className="space-y-3 text-sm text-gray-700">
@@ -396,7 +396,7 @@ export function Home() {
         <div className="bg-gray-50 border border-gray-200 rounded-xl p-4 text-center text-xs text-gray-500">
           <p className="font-semibold text-gray-700">Prototype Demonstration Notice:</p>
           <p className="mt-0.5">
-            All transaction figures, match scores, demand curves, and route simulations are illustrative demo data created for the SIH 2026 evaluation.
+            All transaction figures, match scores, demand curves, and route simulations are illustrative demo data.
           </p>
         </div>
       </section>

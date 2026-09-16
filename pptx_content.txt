@@ -1,0 +1,168 @@
+--- Slide 1 ---
+
+
+TITLE PAGE
+SMART INDIA HACKATHON 2026
+Problem Statement ID – SIH26033
+
+Problem Statement Title – Multiple intermediaries reduce farmers earnings and increase consumer prices
+
+Theme – Agriculture, FoodTech & Rural Development
+
+PS Category – Software
+
+Team ID –
+
+Team Name – Team Allied
+ 
+--- Slide 2 ---
+
+KISAN DIRECT
+2
+@SIH Idea submission- Template
+TEAM ALLIED
+PROPOSED SOLUTION
+HOW IT ADDRESSESS PS 33
+
+INNOVATION & UNIQUENESS
+Kisan Direct is an AI-assisted digital agricultural marketplace connecting farmers and FPOs directly with verified retailers, restaurants, processors and institutional buyers
+
+Kisan Direct  improves price discovery, intelligently matches farmers with suitable buyers, forecasts demand, and optimizes logistics to reduce unnecessary supply-chain losses and improve value realization for farmers and buyers.
+
+FARMER → LIST → AI MATCH → PRICE → BUYER → LOGISTICS → DELIVERY → PAYMENT
+
+
+Direct crop listings and verified buyer offers reduce opaque, unnecessary layers.
+
+Price Intelligence provides market context, trends and clearly labelled estimates before negotiation.
+
+Explainable Al competes crop, quantity, quality, price, distance. delivery and reliability.
+
+Logistics estimates Show vehicle, cost and ETA before the farmer accepts.
+
+Farmer remains in control: Al recommends and explains. but never auto-accepts.
+
+
+Explainable match score: Instead of a black-box recommendation, every buyer-match result includes sub-scores, reasons and warnings. 
+
+ Beyond highest price: A nearer buyer with a fair offer can rank higher than a distant buyer whose logistics cost erodes the apparent gain.
+
+Modular AI: Matching, price prediction, demand forecasting and logistics are independently runnable Python modules, making them replaceable without changing the API contract.
+
+Transparent service layer: The design retains logistics and aggregation as visible services rather than treating them as a problem to eliminate.
+
+
+
+--- Slide 3 ---
+
+TECHNICAL APPROACH
+3
+@SIH Idea submission- Template
+TEAM ALLIED
+TECHNOLOGIES TO BE USED
+
+METHODOLOGY & WORKFLOW
+        Complete transaction flow
+ Register and authenticate: Farmer, buyer or administrator signs in through JWT-backed role access. 
+
+Create a listing: Farmer/FPO enters crop, quantity, quality, expected price, harvest timing and location. 
+
+Discover and offer: Buyer searches marketplace listings and submits an offer for a suitable batch. 
+
+Compute match: System scores crop fit, quantity, quality, price, distance, delivery compatibility and reliability.
+
+Review explanation: Farmer sees overall score, factor-level reasons, warnings and the logistics implications.
+
+Plan delivery: Logistics service estimates distance, vehicle type, cost and ETA for the route.
+--- Slide 4 ---
+
+FEASIBILITY AND VIABILITY
+4
+@SIH Idea submission- Template
+TEAM ALLIED
+TECHNICAL FEASIBILITY
+
+Core MVP already works on mature React, PostgreSQL, Docker and JWT technologies.
+Modular ML services can improve without enhancing the main API contract.
+
+MARKET FEASIBILITY
+
+Start with one crop cluster , FPO networks and anchor buyers rather than nationwide liquidity
+Farmers need price context and buyer access ; buyers need verified batches and fulfilment visibility.
+OPERATIONAL FEASIBILITY
+
+FPOs Support onboarding, aegregation and quality checks.
+Logistics providers remain visible , priced services partners.
+COMPETITIVE ADVANTAGES
+
+KisanDirect differentiates through one integrated, farmer-controlled workflow
+Combines prices intelligence , demand forecast , explainable offer matching and logistics in one flow.
+VALIDATION
+
+Run 1-3 FPO clusters with selected crops and anchor buyers. Verify onboarding completion, active listings, offer response time and order completion.
+AI validation Compare match recommendations with actual accepted offers and fulfilled orders. 
+Economic validation Compare farmer net realization, buyer procurement cost, logistics cost and wastage proxies against the baseline; control for crop, grade, season and distance.
+--- Slide 5 ---
+
+IMPACT AND BENEFITS
+5
+@SIH Idea submission- Template
+TEAM ALLIED
+TARGET AUDIENCE & REACH
+
+Small and marginal farmers, FPOs, SHGs, retailers, restaurants, processors, institutions and logistics providers.
+Begin with district-level crop clusters and expand through repeat buyers and FPO Partnership
+SOCIAL IMPACT
+
+Strengthens farmer agency through clear offer, price, quality and delivery information.
+Supports structured buyer discovery for FPOs and women-led SHGs.
+Builds a traceable transaction record for clearer dispute handling
+ECONOMIC IMPACT
+
+Farmers can compare feasible offers using transparent price and logistics information rather than a single local option.
+Buyers gain a more structured way to source batches that fit quality, quantity and timing requirements.
+ENVIRONMENTAL IMPACT
+
+Demand-aware matching and route estimates can reduce failed deliveries and spoilage risk.
+Future multi-stop routing can reduce avoidable travel.
+
+SCALABILITY & SUSTAINABILITY
+
+Phase 1: 1-3 FPO clusters, selected perishables, assisted onboarding, few anchor buyers, manual operations support.
+
+Phase 2: Standardized verification, trained FPO champions, buyer SLA, route-partner network and formal performance dashboard.
+
+Phase 3: Multiple crop clusters, localized demand models, state-specific compliance and integrations with verified market-data sources.
+
+Phase 4: Road-distance routing, multi-stop optimization.
+
+
+--- Slide 6 ---
+
+RESEARCH  AND REFERENCES
+6
+@SIH Idea submission- Template
+GOVERNMENT AND SECTOR REFERANCE
+http://enam.gov.in/
+
+Government of India/SFAC
+
+eNAM Directory
+https://enam.gov.in/web/assest/download/eNAM_Directory_20210720.pdf
+
+transparent price discovery and quality-linked trade
+FAO
+https://www.fao.org/platform-food-loss-waste/resources/publications/grains-and-pulses/1/en
+Reducing Post-Harvest Losses in Indian Agriculture
+FAO SAVE FOOD
+https://www.fao.org/save-food/projects/study-fl-india/en/
+
+Study on Food Loss in India
+Technology Reference
+
+FastAPI, PostgreSQL, PostGIS, scikit-learn, OpenStreetMap and Google OR-Tools official documentation.
+TEAM ALLIED
+Market Data
+ONDC has been working with farmer and artisan communities to enable digital market access, seller enablement and fulfilment support
+
+https://ondc.org/

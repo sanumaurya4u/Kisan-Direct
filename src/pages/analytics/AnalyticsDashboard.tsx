@@ -256,7 +256,7 @@ export function AnalyticsDashboard() {
               </p>
               <div className="pt-1 flex items-center space-x-2 text-[11px] text-gray-500">
                 <AlertCircle className="w-3.5 h-3.5 text-gray-400" />
-                <span>Demonstration Notice: Projections are illustrative demo metrics generated for the SIH 2026 hackathon.</span>
+                <span>Demonstration Notice: Projections are illustrative demo metrics.</span>
               </div>
             </div>
           </div>

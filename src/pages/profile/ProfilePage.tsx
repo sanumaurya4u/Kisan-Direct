@@ -108,7 +108,7 @@ export function ProfilePage() {
                 </h1>
                 <Badge className="bg-emerald-500/30 text-emerald-100 border-emerald-400/40 text-xs px-2.5 py-0.5">
                   <CheckCircle2 className="w-3 h-3 mr-1 inline text-emerald-300" />
-                  Verified SIH Persona
+                  Verified Persona
                 </Badge>
               </div>
               <p className="text-emerald-100 text-sm mt-1 flex items-center gap-2">
@@ -121,7 +121,6 @@ export function ProfilePage() {
           <div className="bg-white/10 backdrop-blur-md rounded-xl p-3 border border-white/15 text-right sm:text-left">
             <p className="text-xs text-emerald-200 font-medium">Authentication Source</p>
             <p className="text-sm font-semibold text-white">Supabase PostgreSQL RLS</p>
-            <p className="text-xs text-emerald-200/80 mt-0.5">SIH Hackathon Problem #26033</p>
           </div>
         </div>
       </div>
@@ -147,7 +146,7 @@ export function ProfilePage() {
                   </span>
                 </div>
                 <p className="text-xs text-emerald-700 leading-relaxed">
-                  Identity documentation verified against simulated national registry for SIH 2026 hackathon demo.
+                  Identity documentation verified against simulated national registry.
                 </p>
               </div>
 
@@ -261,7 +260,7 @@ export function ProfilePage() {
                   </div>
                   <div className="flex justify-between py-1">
                     <span className="text-gray-500">Escalation Desk</span>
-                    <span className="font-semibold text-emerald-700">SIH 2026 Hackathon Core</span>
+                    <span className="font-semibold text-emerald-700">Platform Core</span>
                   </div>
                 </>
               )}

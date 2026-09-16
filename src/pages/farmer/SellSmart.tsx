@@ -344,7 +344,7 @@ export function SellSmart() {
         <div className="flex items-center space-x-2 text-[11px] text-gray-400 justify-center">
           <AlertCircle className="w-3.5 h-3.5" />
           <span>
-            Demonstration Note: AI price recommendations are generated using synthetic 90-day wholesale indices for SIH 2026.
+            Demonstration Note: AI price recommendations are generated using synthetic 90-day wholesale indices.
           </span>
         </div>
       </div>

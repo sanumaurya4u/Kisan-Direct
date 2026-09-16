@@ -21,7 +21,7 @@ const DEMO_ACCOUNTS = [
   { role: 'fpo', name: 'FPO (Sahyadri)', email: 'fpo@kisandirect.com', path: '/fpo/dashboard' },
   { role: 'bulk_buyer', name: 'Buyer (FreshRetail)', email: 'buyer@kisandirect.com', path: '/buyer/dashboard' },
   { role: 'logistics_partner', name: 'Logistics (Kisan Express)', email: 'logistics@kisandirect.com', path: '/logistics/dashboard' },
-  { role: 'admin', name: 'Admin (SIH Ministry)', email: 'admin@kisandirect.com', path: '/admin/dashboard' },
+  { role: 'admin', name: 'Admin (System)', email: 'admin@kisandirect.com', path: '/admin/dashboard' },
 ];
 
 export function BaseLayout() {
@@ -78,10 +78,7 @@ export function BaseLayout() {
               <span className="hidden sm:inline">Kisan Direct</span>
             </Link>
 
-            {/* SIH Tag */}
-            <span className="hidden md:inline-flex items-center text-[11px] font-semibold bg-white/15 text-primary-light px-2 py-0.5 rounded-full border border-white/20">
-              SIH 2026 Prototype
-            </span>
+
           </div>
 
           {/* Center: Search & Quick Persona Switcher for Hackathon Evaluation */}
@@ -212,7 +209,6 @@ export function BaseLayout() {
               <div className="flex items-center space-x-2">
                 <Leaf className="w-4 h-4 text-primary" />
                 <span className="font-semibold text-gray-700">Kisan Direct</span>
-                <span>— Smart India Hackathon 2026 Prototype (PS #26033)</span>
               </div>
               <div className="flex space-x-6">
                 <Link to="/" className="hover:text-text-primary">Home</Link>

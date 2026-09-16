@@ -243,11 +243,7 @@ export function AppSidebar({ isOpen, onClose }: AppSidebarProps) {
           ))}
         </div>
 
-        {/* SIH 2026 Bottom Footer */}
-        <div className="p-3 border-t border-gray-100 bg-gray-50/70 text-center text-[11px] text-gray-500">
-          <p className="font-semibold text-gray-700">SIH 2026 Prototype</p>
-          <p className="text-[10px] text-gray-400 mt-0.5">Problem Statement #26033</p>
-        </div>
+
       </aside>
     </>
   );
