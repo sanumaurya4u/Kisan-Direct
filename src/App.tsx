@@ -16,6 +16,7 @@ import { FarmerOrders } from './pages/farmer/FarmerOrders';
 import { LogisticsDashboard } from './pages/logistics/LogisticsDashboard';
 import { AnalyticsDashboard } from './pages/analytics/AnalyticsDashboard';
 import { AdminDashboard } from './pages/admin/AdminDashboard';
+import { About } from './pages/public/About';
 import { AuthProvider } from './features/auth/AuthContext';
 
 function App() {
@@ -27,7 +28,7 @@ function App() {
           <Route path="login" element={<Login />} />
           <Route path="register" element={<Register />} />
           <Route path="marketplace" element={<Marketplace />} />
-          <Route path="about" element={<div className="p-8 text-center text-gray-500">About page placeholder</div>} />
+          <Route path="about" element={<About />} />
           
           <Route element={<ProtectedRoute allowedRoles={['farmer']} />}>
             <Route path="farmer/dashboard" element={<FarmerDashboard />} />
