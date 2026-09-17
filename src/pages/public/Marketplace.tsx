@@ -43,6 +43,25 @@ interface MarketplaceItem {
   };
 }
 
+const DEFAULT_CROP_IMAGES: Record<string, string> = {
+  tomato: 'https://images.unsplash.com/photo-1592924357228-91a4daadcfea?w=600&auto=format&fit=crop&q=80',
+  onion: 'https://images.unsplash.com/photo-1618512496248-a07fe83aa8cb?w=600&auto=format&fit=crop&q=80',
+  potato: 'https://images.unsplash.com/photo-1518977676601-b53f82aba655?w=600&auto=format&fit=crop&q=80',
+  apple: 'https://images.unsplash.com/photo-1560806887-1e4cd0b6cbd6?w=600&auto=format&fit=crop&q=80',
+  wheat: 'https://images.unsplash.com/photo-1574323347407-f5e1ad6d020b?w=600&auto=format&fit=crop&q=80',
+  rice: 'https://images.unsplash.com/photo-1586201375761-83865001e31c?w=600&auto=format&fit=crop&q=80',
+  mango: 'https://images.unsplash.com/photo-1553279768-865429fa0078?w=600&auto=format&fit=crop&q=80',
+};
+
+function getCropImage(name?: string, fallbackUrl?: string) {
+  if (fallbackUrl && fallbackUrl.trim().length > 0) return fallbackUrl;
+  const key = name?.toLowerCase() || '';
+  for (const crop in DEFAULT_CROP_IMAGES) {
+    if (key.includes(crop)) return DEFAULT_CROP_IMAGES[crop];
+  }
+  return 'https://images.unsplash.com/photo-1595974482597-4b8da8879bc5?w=600&auto=format&fit=crop&q=80';
+}
+
 export function Marketplace() {
   const { user } = useAuth();
   const navigate = useNavigate();
@@ -136,31 +155,38 @@ export function Marketplace() {
     : null;
 
   return (
-    <div className="container mx-auto p-4 md:p-8 space-y-6">
+    <div className="max-w-7xl mx-auto p-4 sm:p-6 md:p-8 space-y-8">
       {/* Header Banner */}
-      <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 bg-gradient-to-r from-green-50 to-emerald-50 p-6 rounded-2xl border border-green-200">
-        <div>
-          <Badge variant="success" className="text-xs mb-1.5 font-semibold">Direct Marketplace</Badge>
-          <h1 className="text-3xl font-extrabold text-gray-900">Fresh Produce Marketplace</h1>
-          <p className="text-sm text-gray-600 mt-1">
+      <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-6 bg-gradient-to-r from-emerald-900 via-primary to-emerald-950 text-white p-6 sm:p-8 md:p-10 rounded-3xl shadow-lg relative overflow-hidden">
+        <div className="space-y-2 relative z-10">
+          <div className="flex items-center gap-2">
+            <span className="bg-fresh/20 border border-fresh/40 text-fresh px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider">
+              🌾 Direct Farmgate Marketplace
+            </span>
+            <span className="text-xs text-emerald-200">0% Middleman Margin</span>
+          </div>
+          <h1 className="text-2xl sm:text-3xl md:text-4xl font-black text-white tracking-tight">
+            Fresh Produce Catalog
+          </h1>
+          <p className="text-sm text-emerald-100/90 max-w-xl leading-relaxed">
             Sourced directly from verified farmers & FPOs across Maharashtra, Punjab, and Haryana.
           </p>
         </div>
 
-        <div className="flex items-center space-x-2">
+        <div className="flex flex-wrap items-center gap-3 relative z-10">
           <Button
             variant="outline"
             size="sm"
             onClick={() => navigate('/analytics')}
-            className="text-xs border-emerald-300 text-emerald-800"
+            className="bg-white/10 hover:bg-white/20 text-white border-white/25 text-xs font-bold h-10 px-4 rounded-xl"
           >
-            <Sparkles className="w-3.5 h-3.5 mr-1 text-emerald-600" />
+            <Sparkles className="w-4 h-4 mr-1.5 text-fresh" />
             AI Demand Forecast
           </Button>
           <Button
             size="sm"
             onClick={() => navigate('/buyer/dashboard/requirements/new')}
-            className="text-xs shadow-xs"
+            className="bg-fresh hover:bg-fresh-hover text-slate-950 text-xs font-extrabold h-10 px-5 rounded-xl shadow-md"
           >
             + Post Bulk Requirement
           </Button>
@@ -168,45 +194,49 @@ export function Marketplace() {
       </div>
 
       {/* Filter and Control Bar */}
-      <div className="bg-white p-4 rounded-xl border border-gray-200 shadow-xs space-y-4">
+      <div className="bg-white p-5 rounded-2xl border border-emerald-100 shadow-sm space-y-4">
         {/* Row 1: Search & Sort */}
-        <div className="flex flex-col md:flex-row gap-3 items-center justify-between">
+        <div className="flex flex-col md:flex-row gap-4 items-center justify-between">
           <div className="relative flex-1 w-full">
-            <Search className="absolute left-3.5 top-3 h-4 w-4 text-gray-400" />
+            <Search className="absolute left-3.5 top-3.5 h-4 w-4 text-gray-400" />
             <Input
-              placeholder="Search crop name (e.g. Tomato, Onion) or harvest location..."
-              className="pl-10 h-10 text-sm"
+              placeholder="Search crop name (e.g. Tomato, Onion, Wheat) or location..."
+              className="pl-10 h-11 text-sm bg-gray-50/70 border-gray-200 focus:bg-white"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
             />
           </div>
 
           <div className="flex items-center space-x-3 w-full md:w-auto justify-between md:justify-end">
-            <div className="flex items-center space-x-1.5 text-xs text-gray-500">
-              <span className="font-medium">Sort:</span>
+            <div className="flex items-center space-x-2 text-xs text-gray-600">
+              <span className="font-semibold">Sort by:</span>
               <select
                 value={sortBy}
                 onChange={(e) => setSortBy(e.target.value)}
-                className="border border-gray-300 rounded-lg px-2.5 py-1.5 text-xs bg-white font-medium"
+                className="border border-gray-200 rounded-xl px-3 py-2 text-xs bg-white font-semibold text-gray-800 focus:outline-none focus:ring-2 focus:ring-primary cursor-pointer"
               >
-                <option value="recommended">Recommended</option>
+                <option value="recommended">⭐ Recommended</option>
                 <option value="price_asc">Price: Low to High</option>
                 <option value="price_desc">Price: High to Low</option>
                 <option value="qty_desc">Quantity: High to Low</option>
               </select>
             </div>
 
-            <div className="flex items-center border border-gray-200 rounded-lg p-0.5 bg-gray-50">
+            <div className="flex items-center border border-gray-200 rounded-xl p-1 bg-gray-50">
               <button
                 onClick={() => setViewMode('grid')}
-                className={`p-1.5 rounded-md ${viewMode === 'grid' ? 'bg-white shadow-xs text-primary' : 'text-gray-400'}`}
+                className={`p-1.5 rounded-lg transition-colors cursor-pointer ${
+                  viewMode === 'grid' ? 'bg-white shadow-xs text-primary font-bold' : 'text-gray-400 hover:text-gray-600'
+                }`}
                 title="Grid view"
               >
                 <LayoutGrid className="w-4 h-4" />
               </button>
               <button
                 onClick={() => setViewMode('list')}
-                className={`p-1.5 rounded-md ${viewMode === 'list' ? 'bg-white shadow-xs text-primary' : 'text-gray-400'}`}
+                className={`p-1.5 rounded-lg transition-colors cursor-pointer ${
+                  viewMode === 'list' ? 'bg-white shadow-xs text-primary font-bold' : 'text-gray-400 hover:text-gray-600'
+                }`}
                 title="List view"
               >
                 <List className="w-4 h-4" />
@@ -215,20 +245,25 @@ export function Marketplace() {
           </div>
         </div>
 
-        {/* Row 2: Category Filter Tabs */}
-        <div className="flex items-center space-x-2 overflow-x-auto pb-1 text-xs">
-          <span className="text-gray-400 font-medium mr-1">Category:</span>
-          {['all', 'vegetables', 'fruits', 'grains'].map((cat) => (
+        {/* Row 2: Category Filter Tabs with Agricultural Icons */}
+        <div className="flex items-center space-x-2 overflow-x-auto pb-1 text-xs pt-1">
+          <span className="text-gray-400 font-semibold mr-1">Categories:</span>
+          {[
+            { id: 'all', label: '🌾 All Produce' },
+            { id: 'vegetables', label: '🥔 Vegetables' },
+            { id: 'fruits', label: '🍎 Fruits' },
+            { id: 'grains', label: '🌾 Grains & Cereals' },
+          ].map((cat) => (
             <button
-              key={cat}
-              onClick={() => setSelectedCategory(cat)}
-              className={`px-3 py-1.5 rounded-full capitalize font-semibold transition-colors ${
-                selectedCategory === cat
+              key={cat.id}
+              onClick={() => setSelectedCategory(cat.id)}
+              className={`px-4 py-2 rounded-xl font-bold transition-all cursor-pointer ${
+                selectedCategory === cat.id
                   ? 'bg-primary text-white shadow-xs'
-                  : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                  : 'bg-gray-100/80 text-gray-700 hover:bg-emerald-50 hover:text-primary'
               }`}
             >
-              {cat === 'all' ? 'All Produce' : cat}
+              {cat.label}
             </button>
           ))}
         </div>
@@ -236,17 +271,17 @@ export function Marketplace() {
 
       {/* Main Produce Catalog */}
       {isLoading ? (
-        <div className="py-16">
-          <LoadingSpinner text="Fetching active market listings..." />
+        <div className="py-20">
+          <LoadingSpinner text="Fetching active market listings from verified farmers..." />
         </div>
       ) : filteredListings.length === 0 ? (
-        <div className="text-center py-20 bg-white rounded-2xl border border-gray-200">
-          <Leaf className="w-12 h-12 text-gray-300 mx-auto mb-3" />
-          <h3 className="text-base font-bold text-gray-900">No Produce Lots Found</h3>
-          <p className="text-xs text-gray-500 mt-1 max-w-sm mx-auto">
-            No active lots match your search query. Try clearing your filters or check back shortly.
+        <div className="text-center py-20 bg-white rounded-3xl border border-emerald-100 shadow-sm space-y-3">
+          <Leaf className="w-12 h-12 text-emerald-300 mx-auto" />
+          <h3 className="text-lg font-bold text-gray-900">No Produce Lots Found</h3>
+          <p className="text-xs text-gray-500 max-w-sm mx-auto">
+            No active lots match your search query. Try clearing filters or search for another commodity.
           </p>
-          <div className="mt-4">
+          <div className="pt-2">
             <Button
               variant="outline"
               size="sm"
@@ -255,139 +290,149 @@ export function Marketplace() {
                 setSelectedCategory('all');
               }}
             >
-              Reset Filters
+              Reset All Filters
             </Button>
           </div>
         </div>
       ) : viewMode === 'grid' ? (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {filteredListings.map((item) => (
-            <Card
-              key={item.id}
-              className="overflow-hidden hover:shadow-md transition-all duration-200 flex flex-col border-gray-200"
-            >
-              {/* Image Banner */}
-              <div className="relative w-full h-48 bg-gray-100 overflow-hidden">
-                {item.image_url ? (
+          {filteredListings.map((item) => {
+            const cropImg = getCropImage(item.products?.name, item.image_url);
+            return (
+              <Card
+                key={item.id}
+                className="overflow-hidden hover:shadow-kisan-hover transition-all duration-300 flex flex-col border-emerald-100/80 rounded-2xl group hover:-translate-y-1"
+              >
+                {/* Image Banner */}
+                <div className="relative w-full h-52 bg-emerald-950 overflow-hidden">
                   <img
-                    src={item.image_url}
+                    src={cropImg}
                     alt={item.products?.name}
-                    className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                   />
-                ) : (
-                  <div className="w-full h-full bg-gradient-to-br from-green-50 to-emerald-100 flex items-center justify-center text-primary">
-                    <Leaf className="w-12 h-12 text-green-300" />
-                  </div>
-                )}
-                {item.grade && (
-                  <Badge variant="outline" className="absolute top-3 right-3 bg-white/95 backdrop-blur-xs text-xs font-bold shadow-xs">
-                    {item.grade}
-                  </Badge>
-                )}
-              </div>
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent pointer-events-none" />
 
-              {/* Card Body */}
-              <CardContent className="p-5 flex flex-col flex-1 space-y-3">
-                <div className="flex justify-between items-start">
-                  <div>
-                    <h3 className="font-bold text-lg text-gray-900">{item.products?.name}</h3>
-                    <p className="text-xs text-gray-500 flex items-center mt-0.5">
-                      <MapPin className="w-3 h-3 mr-1 text-gray-400" />
-                      {item.location_name}
-                    </p>
+                  {item.grade && (
+                    <Badge variant="fresh" className="absolute top-3 right-3 text-xs font-bold shadow-xs">
+                      {item.grade}
+                    </Badge>
+                  )}
+
+                  <div className="absolute bottom-3 left-3 bg-white/95 backdrop-blur-xs text-[11px] font-bold text-emerald-900 px-2.5 py-0.5 rounded-full shadow-xs flex items-center gap-1">
+                    <ShieldCheck className="w-3.5 h-3.5 text-emerald-600" />
+                    Verified Lot
                   </div>
-                  <div className="text-right">
-                    <span className="text-xl font-extrabold text-primary block">
-                      ₹{item.price_per_unit}
+                </div>
+
+                {/* Card Body */}
+                <CardContent className="p-5 flex flex-col flex-1 space-y-3">
+                  <div className="flex justify-between items-start">
+                    <div>
+                      <h3 className="font-extrabold text-xl text-gray-900 group-hover:text-primary transition-colors">
+                        {item.products?.name}
+                      </h3>
+                      <p className="text-xs text-gray-500 flex items-center mt-1 font-medium">
+                        <MapPin className="w-3.5 h-3.5 mr-1 text-emerald-600 flex-shrink-0" />
+                        {item.location_name}
+                      </p>
+                    </div>
+                    <div className="text-right">
+                      <span className="text-2xl font-black text-primary block leading-none">
+                        ₹{item.price_per_unit}
+                      </span>
+                      <span className="text-[11px] text-gray-500 font-semibold mt-0.5 block">
+                        per {item.products?.unit}
+                      </span>
+                    </div>
+                  </div>
+
+                  {/* Stock Details Badge */}
+                  <div className="p-2.5 rounded-xl bg-emerald-50/60 border border-emerald-100 text-xs flex justify-between items-center text-gray-700">
+                    <span className="text-emerald-900 font-medium">Available Quantity:</span>
+                    <span className="font-extrabold text-emerald-950">
+                      {item.available_quantity} {item.products?.unit}
                     </span>
-                    <span className="text-[11px] text-gray-500 font-normal">
-                      per {item.products?.unit}
+                  </div>
+
+                  {/* Seller Attribution */}
+                  <div className="text-xs text-gray-500 pt-2 border-t border-gray-100 flex items-center justify-between">
+                    <span>Sold by: <strong className="text-gray-900 font-bold">{item.profiles?.full_name}</strong></span>
+                    <span className="flex items-center text-emerald-700 font-bold text-[11px]">
+                      0% Margin
                     </span>
                   </div>
-                </div>
 
-                {/* Stock Details */}
-                <div className="p-2.5 rounded-lg bg-gray-50 border border-gray-100 text-xs flex justify-between items-center text-gray-600">
-                  <span>Available Stock:</span>
-                  <span className="font-bold text-gray-900">
-                    {item.available_quantity} {item.products?.unit}
-                  </span>
-                </div>
-
-                {/* Seller Attribution */}
-                <div className="text-[11px] text-gray-400 pt-2 border-t border-gray-100 flex items-center justify-between">
-                  <span>Sold by: <strong className="text-gray-700">{item.profiles?.full_name}</strong></span>
-                  <span className="flex items-center text-emerald-600 font-medium">
-                    <ShieldCheck className="w-3 h-3 mr-0.5" /> Direct
-                  </span>
-                </div>
-
-                {/* Direct Action Button */}
-                <div className="pt-2 mt-auto">
-                  <Button
-                    className="w-full h-10 font-bold shadow-xs flex items-center justify-center gap-2"
-                    onClick={() => handleOpenOrderModal(item)}
-                  >
-                    <ShoppingCart className="w-4 h-4" />
-                    Buy Now / Place Order
-                  </Button>
-                </div>
-              </CardContent>
-            </Card>
-          ))}
+                  {/* Direct Action Button */}
+                  <div className="pt-2 mt-auto">
+                    <Button
+                      className="w-full h-11 font-bold shadow-xs flex items-center justify-center gap-2 rounded-xl"
+                      onClick={() => handleOpenOrderModal(item)}
+                    >
+                      <ShoppingCart className="w-4 h-4" />
+                      Buy Now / Place Order
+                    </Button>
+                  </div>
+                </CardContent>
+              </Card>
+            );
+          })}
         </div>
       ) : (
         /* List View */
-        <div className="bg-white rounded-xl border border-gray-200 overflow-hidden divide-y divide-gray-100 shadow-xs">
-          {filteredListings.map((item) => (
-            <div key={item.id} className="p-4 flex flex-col sm:flex-row items-center justify-between gap-4 hover:bg-gray-50/50">
-              <div className="flex items-center space-x-4">
-                {item.image_url ? (
-                  <img src={item.image_url} alt={item.products?.name} className="w-16 h-16 rounded-xl object-cover border" />
-                ) : (
-                  <div className="w-16 h-16 rounded-xl bg-green-50 text-primary flex items-center justify-center">
-                    <Leaf className="w-6 h-6" />
-                  </div>
-                )}
-                <div>
-                  <h3 className="font-bold text-base text-gray-900">{item.products?.name}</h3>
-                  <div className="flex items-center gap-2 text-xs text-gray-500 mt-0.5">
-                    <span>{item.location_name}</span>
-                    <span>•</span>
-                    <Badge variant="outline" className="text-[10px]">{item.grade || 'Grade A'}</Badge>
-                    <span>•</span>
-                    <span>Seller: {item.profiles?.full_name}</span>
+        <div className="bg-white rounded-2xl border border-emerald-100 overflow-hidden divide-y divide-gray-100 shadow-sm">
+          {filteredListings.map((item) => {
+            const cropImg = getCropImage(item.products?.name, item.image_url);
+            return (
+              <div key={item.id} className="p-5 flex flex-col sm:flex-row items-center justify-between gap-4 hover:bg-emerald-50/30 transition-colors">
+                <div className="flex items-center space-x-4">
+                  <img
+                    src={cropImg}
+                    alt={item.products?.name}
+                    className="w-20 h-20 rounded-2xl object-cover border border-emerald-100 shadow-xs"
+                  />
+                  <div>
+                    <h3 className="font-extrabold text-lg text-gray-900">{item.products?.name}</h3>
+                    <div className="flex flex-wrap items-center gap-2 text-xs text-gray-500 mt-1">
+                      <span className="flex items-center">
+                        <MapPin className="w-3.5 h-3.5 mr-1 text-emerald-600" />
+                        {item.location_name}
+                      </span>
+                      <span>•</span>
+                      <Badge variant="fresh" className="text-[10px]">{item.grade || 'Grade A'}</Badge>
+                      <span>•</span>
+                      <span>Seller: <strong className="text-gray-800">{item.profiles?.full_name}</strong></span>
+                    </div>
                   </div>
                 </div>
-              </div>
 
-              <div className="flex items-center space-x-6 w-full sm:w-auto justify-between sm:justify-end">
-                <div className="text-right">
-                  <div className="text-lg font-bold text-primary">₹{item.price_per_unit} / {item.products?.unit}</div>
-                  <div className="text-xs text-gray-500">{item.available_quantity} {item.products?.unit} in stock</div>
+                <div className="flex items-center space-x-6 w-full sm:w-auto justify-between sm:justify-end">
+                  <div className="text-right">
+                    <div className="text-xl font-black text-primary">₹{item.price_per_unit} / {item.products?.unit}</div>
+                    <div className="text-xs text-gray-500 font-medium">{item.available_quantity} {item.products?.unit} in stock</div>
+                  </div>
+                  <Button size="sm" className="rounded-xl px-5 h-10 font-bold" onClick={() => handleOpenOrderModal(item)}>
+                    <ShoppingCart className="w-4 h-4 mr-1.5" /> Order
+                  </Button>
                 </div>
-                <Button size="sm" onClick={() => handleOpenOrderModal(item)}>
-                  <ShoppingCart className="w-3.5 h-3.5 mr-1" /> Order
-                </Button>
               </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
       )}
 
       {/* DIRECT PURCHASE & ORDER MODAL */}
       {selectedListing && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-xs">
-          <div className="bg-white rounded-2xl border border-gray-200 shadow-2xl max-w-lg w-full overflow-hidden animate-in fade-in zoom-in-95 duration-150">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
+          <div className="bg-white rounded-3xl border border-emerald-100 shadow-2xl max-w-lg w-full overflow-hidden animate-in fade-in zoom-in-95 duration-150">
             {/* Modal Header */}
-            <div className="p-5 bg-gradient-to-r from-green-50 to-emerald-50 border-b border-green-200 flex justify-between items-center">
+            <div className="p-5 bg-gradient-to-r from-emerald-50 to-green-50 border-b border-emerald-100 flex justify-between items-center">
               <div className="flex items-center space-x-2">
                 <ShoppingCart className="w-5 h-5 text-primary" />
-                <h3 className="font-bold text-gray-900 text-lg">Direct Farm Purchase</h3>
+                <h3 className="font-black text-gray-900 text-lg">Direct Farm Purchase</h3>
               </div>
               <button
                 onClick={() => setSelectedListing(null)}
-                className="p-1 rounded-lg text-gray-400 hover:text-gray-600 hover:bg-gray-100"
+                className="p-1.5 rounded-xl text-gray-400 hover:text-gray-600 hover:bg-white/80 cursor-pointer transition-colors"
               >
                 <X className="w-5 h-5" />
               </button>

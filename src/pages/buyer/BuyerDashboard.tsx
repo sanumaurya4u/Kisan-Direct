@@ -97,14 +97,14 @@ export function BuyerDashboard() {
       {/* 4 KPI Cards */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
         {/* Stat 1: Active Requirements */}
-        <div className="bg-white p-5 rounded-xl border border-gray-200 shadow-xs space-y-1">
-          <div className="flex justify-between items-center text-gray-500 text-xs font-medium">
-            <span>Open Requirements</span>
-            <span className="p-1.5 bg-blue-50 text-blue-700 rounded-lg">
+        <div className="bg-white p-5 rounded-2xl border border-gray-200/80 shadow-kisan-card space-y-1 hover:shadow-kisan-hover transition-all">
+          <div className="flex justify-between items-center text-gray-500 text-xs font-medium uppercase tracking-wider">
+            <span>Open Demands</span>
+            <span className="p-1.5 bg-blue-50 text-blue-700 rounded-xl">
               <ClipboardList className="w-4 h-4" />
             </span>
           </div>
-          <div className="text-2xl md:text-3xl font-bold text-gray-900">
+          <div className="text-2xl md:text-3xl font-black text-gray-900">
             {activeReqsCount > 0 ? activeReqsCount : 3}
           </div>
           <p className="text-[11px] text-blue-600 font-medium">
@@ -113,46 +113,46 @@ export function BuyerDashboard() {
         </div>
 
         {/* Stat 2: Active Matches */}
-        <div className="bg-white p-5 rounded-xl border border-gray-200 shadow-xs space-y-1">
-          <div className="flex justify-between items-center text-gray-500 text-xs font-medium">
+        <div className="bg-white p-5 rounded-2xl border border-gray-200/80 shadow-kisan-card space-y-1 hover:shadow-kisan-hover transition-all">
+          <div className="flex justify-between items-center text-gray-500 text-xs font-medium uppercase tracking-wider">
             <span>AI Verified Matches</span>
-            <span className="p-1.5 bg-emerald-50 text-emerald-700 rounded-lg">
+            <span className="p-1.5 bg-emerald-50 text-emerald-700 rounded-xl">
               <Sparkles className="w-4 h-4" />
             </span>
           </div>
-          <div className="text-2xl md:text-3xl font-bold text-gray-900">
+          <div className="text-2xl md:text-3xl font-black text-gray-900">
             {requirements.length * 2 || 6}
           </div>
-          <p className="text-[11px] text-emerald-600 font-medium">
+          <p className="text-[11px] text-emerald-700 font-semibold">
             Score 90%+ compatibility
           </p>
         </div>
 
         {/* Stat 3: Orders in Transit */}
-        <div className="bg-white p-5 rounded-xl border border-gray-200 shadow-xs space-y-1">
-          <div className="flex justify-between items-center text-gray-500 text-xs font-medium">
+        <div className="bg-white p-5 rounded-2xl border border-gray-200/80 shadow-kisan-card space-y-1 hover:shadow-kisan-hover transition-all">
+          <div className="flex justify-between items-center text-gray-500 text-xs font-medium uppercase tracking-wider">
             <span>In-Transit Deliveries</span>
-            <span className="p-1.5 bg-amber-50 text-amber-700 rounded-lg">
+            <span className="p-1.5 bg-amber-50 text-amber-700 rounded-xl">
               <Clock className="w-4 h-4" />
             </span>
           </div>
-          <div className="text-2xl md:text-3xl font-bold text-gray-900">
+          <div className="text-2xl md:text-3xl font-black text-gray-900">
             {pendingOrdersCount > 0 ? pendingOrdersCount : 1}
           </div>
-          <p className="text-[11px] text-amber-600 font-medium">
+          <p className="text-[11px] text-amber-700 font-medium">
             GPS tracked fleet
           </p>
         </div>
 
         {/* Stat 4: Total Spend */}
-        <div className="bg-white p-5 rounded-xl border border-gray-200 shadow-xs space-y-1">
-          <div className="flex justify-between items-center text-gray-500 text-xs font-medium">
+        <div className="bg-white p-5 rounded-2xl border border-gray-200/80 shadow-kisan-card space-y-1 hover:shadow-kisan-hover transition-all">
+          <div className="flex justify-between items-center text-gray-500 text-xs font-medium uppercase tracking-wider">
             <span>Direct Spend Volume</span>
-            <span className="p-1.5 bg-purple-50 text-purple-700 rounded-lg">
+            <span className="p-1.5 bg-purple-50 text-purple-700 rounded-xl">
               <TrendingUp className="w-4 h-4" />
             </span>
           </div>
-          <div className="text-2xl md:text-3xl font-bold text-gray-900">
+          <div className="text-2xl md:text-3xl font-black text-gray-900">
             ₹{totalProcurementSpend > 0 ? totalProcurementSpend.toLocaleString('en-IN') : '33,200'}
           </div>
           <p className="text-[11px] text-purple-600 font-medium">
@@ -162,7 +162,7 @@ export function BuyerDashboard() {
       </div>
 
       {/* Quick Action Navigation Bar */}
-      <div className="bg-white p-4 rounded-xl border border-gray-200 shadow-xs">
+      <div className="bg-white p-4 rounded-2xl border border-gray-200/80 shadow-kisan-card">
         <div className="flex items-center justify-between flex-wrap gap-2">
           <span className="text-xs font-bold text-gray-500 uppercase tracking-wider">
             Quick Actions:
@@ -205,7 +205,7 @@ export function BuyerDashboard() {
       </div>
 
       {/* Main Requirements Table */}
-      <div className="bg-white p-6 rounded-xl shadow-xs border border-gray-200 space-y-4">
+      <div className="bg-white p-6 rounded-2xl shadow-kisan-card border border-gray-200/80 space-y-4">
         <div className="flex justify-between items-center">
           <div>
             <h2 className="text-xl font-bold text-gray-900">Procurement Requirements</h2>

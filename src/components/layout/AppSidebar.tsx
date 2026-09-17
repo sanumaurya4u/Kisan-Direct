@@ -162,32 +162,32 @@ export function AppSidebar({ isOpen, onClose }: AppSidebarProps) {
 
       {/* Sidebar Panel */}
       <aside
-        className={`fixed top-16 bottom-0 left-0 z-40 w-64 bg-white border-r border-gray-200 flex flex-col transition-transform duration-200 ease-in-out lg:translate-x-0 ${
+        className={`fixed top-18 bottom-0 left-0 z-40 w-64 bg-[#FAFCF9] border-r border-emerald-100 flex flex-col transition-transform duration-200 ease-in-out lg:translate-x-0 ${
           isOpen ? 'translate-x-0' : '-translate-x-full'
         }`}
       >
         {/* User Persona Card in Sidebar */}
-        <div className="p-4 border-b border-gray-100 bg-gray-50/50">
+        <div className="p-4 border-b border-emerald-100/60 bg-emerald-50/40">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-3 min-w-0">
-              <div className="w-10 h-10 rounded-full bg-primary/10 border border-primary/20 flex items-center justify-center text-primary flex-shrink-0">
+              <div className="w-10 h-10 rounded-2xl bg-primary/10 border border-primary/20 flex items-center justify-center text-primary flex-shrink-0">
                 {renderRoleIcon(role)}
               </div>
               <div className="min-w-0">
-                <p className="font-semibold text-sm text-gray-900 truncate">
+                <p className="font-bold text-sm text-gray-900 truncate">
                   {profile?.full_name || 'Kisan Direct User'}
                 </p>
                 <div className="flex items-center gap-1.5 mt-0.5">
-                  <Badge variant="outline" className="text-[10px] uppercase font-bold tracking-wider px-1.5 py-0">
+                  <Badge variant="fresh" className="text-[10px] uppercase font-bold tracking-wider px-2 py-0">
                     {profile?.role?.replace('_', ' ') || 'Guest'}
                   </Badge>
-                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" title="Online" />
+                  <span className="w-2 h-2 rounded-full bg-fresh" title="Online" />
                 </div>
               </div>
             </div>
             <button
               onClick={onClose}
-              className="lg:hidden p-1 rounded-md text-gray-400 hover:text-gray-600 hover:bg-gray-100"
+              className="lg:hidden p-1 rounded-lg text-gray-400 hover:text-gray-600 hover:bg-gray-100 cursor-pointer"
             >
               <X className="w-5 h-5" />
             </button>
@@ -198,7 +198,7 @@ export function AppSidebar({ isOpen, onClose }: AppSidebarProps) {
         <div className="flex-1 overflow-y-auto px-3 py-4 space-y-6">
           {sections.map((section, idx) => (
             <div key={idx}>
-              <h3 className="px-3 text-[11px] font-bold text-gray-400 uppercase tracking-wider mb-2">
+              <h3 className="px-3 text-[11px] font-bold text-emerald-900/60 uppercase tracking-wider mb-2">
                 {section.title}
               </h3>
               <nav className="space-y-1">
@@ -211,23 +211,23 @@ export function AppSidebar({ isOpen, onClose }: AppSidebarProps) {
                       onClick={onClose}
                       end={item.to.includes('dashboard') || item.to === '/marketplace'}
                       className={({ isActive }) =>
-                        `flex items-center justify-between px-3 py-2 text-sm font-medium rounded-lg transition-colors ${
+                        `flex items-center justify-between px-3.5 py-2.5 text-sm font-semibold rounded-xl transition-all ${
                           isActive
-                            ? 'bg-primary text-white shadow-xs font-semibold'
-                            : 'text-gray-700 hover:bg-gray-100 hover:text-gray-900'
+                            ? 'bg-primary text-white shadow-sm'
+                            : 'text-gray-700 hover:bg-emerald-50 hover:text-primary'
                         }`
                       }
                     >
                       {({ isActive }) => (
                         <>
                           <div className="flex items-center space-x-3 min-w-0">
-                            <Icon className={`w-4 h-4 flex-shrink-0 ${isActive ? 'text-white' : 'text-gray-500'}`} />
+                            <Icon className={`w-4 h-4 flex-shrink-0 ${isActive ? 'text-emerald-300' : 'text-gray-500'}`} />
                             <span className="truncate">{item.label}</span>
                           </div>
                           {item.badge && (
                             <span
-                              className={`text-[10px] font-bold px-1.5 py-0.5 rounded-full ${
-                                isActive ? 'bg-white/20 text-white' : 'bg-green-100 text-green-800'
+                              className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${
+                                isActive ? 'bg-white/20 text-white' : 'bg-emerald-100 text-emerald-900'
                               }`}
                             >
                               {item.badge}
@@ -242,8 +242,6 @@ export function AppSidebar({ isOpen, onClose }: AppSidebarProps) {
             </div>
           ))}
         </div>
-
-
       </aside>
     </>
   );

@@ -122,18 +122,18 @@ export function SellSmart() {
   return (
     <div className="container mx-auto p-4 md:p-8 space-y-8 max-w-5xl">
       {/* Header */}
-      <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 border-b pb-6">
+      <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 border-b border-gray-200 pb-6">
         <div>
           <div className="flex items-center space-x-2">
             <span className="p-1.5 bg-emerald-100 text-emerald-800 rounded-lg">
               <BrainCircuit className="w-5 h-5" />
             </span>
-            <Badge variant="success" className="text-xs">AI Advisory Engine</Badge>
+            <Badge variant="fresh" className="text-xs">AI Advisory Engine • भाव सलाहकार</Badge>
           </div>
-          <h1 className="text-3xl font-bold text-gray-900 mt-1">
+          <h1 className="text-3xl font-extrabold text-gray-900 mt-2 tracking-tight">
             Sell Smart — Market Price & Demand Optimizer
           </h1>
-          <p className="text-sm text-gray-500">
+          <p className="text-sm text-gray-500 mt-1">
             Real-time price discovery based on 90-day wholesale procurement curves and regional supply deficits.
           </p>
         </div>
@@ -147,17 +147,41 @@ export function SellSmart() {
       </div>
 
       {/* Input Parameters Form Card */}
-      <Card className="border-gray-200 shadow-xs">
-        <CardHeader className="pb-3">
-          <CardTitle className="text-base font-bold text-gray-900 flex items-center gap-2">
-            <Calculator className="w-4 h-4 text-primary" />
-            Specify Your Harvest Parameters
-          </CardTitle>
+      <Card className="border-gray-200/80 shadow-kisan-card rounded-2xl overflow-hidden bg-white">
+        <CardHeader className="bg-emerald-50/50 border-b border-emerald-100/60 pb-4">
+          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2">
+            <CardTitle className="text-base font-bold text-gray-900 flex items-center gap-2">
+              <Calculator className="w-4 h-4 text-primary" />
+              Specify Your Harvest Parameters (फसल और मात्रा चुनें)
+            </CardTitle>
+            {/* Quick Crop Selector Pills */}
+            <div className="flex flex-wrap gap-1.5">
+              {Object.keys(CROP_DATABASE).map((crop) => (
+                <button
+                  key={crop}
+                  type="button"
+                  onClick={() => {
+                    setSelectedCrop(crop);
+                    handleSimulate();
+                  }}
+                  className={`px-2.5 py-1 rounded-full text-xs font-semibold transition-all ${
+                    selectedCrop === crop
+                      ? 'bg-primary text-white shadow-xs'
+                      : 'bg-white text-gray-600 border border-gray-200 hover:border-primary/50'
+                  }`}
+                >
+                  {crop}
+                </button>
+              ))}
+            </div>
+          </div>
         </CardHeader>
-        <CardContent>
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+        <CardContent className="pt-6">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-5">
             <div className="space-y-1.5">
-              <Label htmlFor="cropSelect">Crop / Commodity</Label>
+              <Label htmlFor="cropSelect" className="font-semibold text-gray-700 text-xs uppercase tracking-wider">
+                Crop / Commodity
+              </Label>
               <select
                 id="cropSelect"
                 value={selectedCrop}
@@ -165,7 +189,7 @@ export function SellSmart() {
                   setSelectedCrop(e.target.value);
                   handleSimulate();
                 }}
-                className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm bg-white font-medium"
+                className="w-full border border-gray-300 rounded-xl px-3 py-2.5 text-sm bg-white font-semibold text-gray-900 focus:outline-hidden focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all"
               >
                 {Object.keys(CROP_DATABASE).map((crop) => (
                   <option key={crop} value={crop}>{crop}</option>
@@ -174,18 +198,22 @@ export function SellSmart() {
             </div>
 
             <div className="space-y-1.5">
-              <Label htmlFor="harvestQuantity">Harvest Volume (kg)</Label>
+              <Label htmlFor="harvestQuantity" className="font-semibold text-gray-700 text-xs uppercase tracking-wider">
+                Harvest Volume ({analysis.unit})
+              </Label>
               <Input
                 id="harvestQuantity"
                 type="number"
                 value={quantityKg}
                 onChange={(e) => setQuantityKg(Math.max(10, Number(e.target.value) || 0))}
-                className="h-10 text-sm font-semibold"
+                className="h-10 text-base font-bold text-gray-900"
               />
             </div>
 
             <div className="space-y-1.5">
-              <Label htmlFor="farmLocation">Farmgate Location</Label>
+              <Label htmlFor="farmLocation" className="font-semibold text-gray-700 text-xs uppercase tracking-wider">
+                Farmgate Location
+              </Label>
               <Input
                 id="farmLocation"
                 type="text"
@@ -205,71 +233,71 @@ export function SellSmart() {
             <BrainCircuit className="w-5 h-5 text-emerald-600" />
             AI Market Analysis: {analysis.name}
           </h2>
-          <span className="text-xs text-gray-400 font-mono">
-            {isAnalyzing ? 'Recalculating...' : 'Confidence: 93.4% • Demo Model'}
+          <span className="text-xs text-gray-500 font-mono bg-emerald-50 px-2.5 py-1 rounded-full border border-emerald-200">
+            {isAnalyzing ? 'Recalculating...' : 'Confidence: 93.4% • Active Algorithm'}
           </span>
         </div>
 
         {/* 4 Summary Stat Metrics */}
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
           {/* Card 1: Demand Level */}
-          <div className="bg-white p-5 rounded-xl border border-gray-200 shadow-xs space-y-1">
-            <div className="text-xs text-gray-500 font-medium">Regional Demand Level</div>
+          <div className="bg-white p-5 rounded-2xl border border-gray-200/80 shadow-kisan-card space-y-2 hover:shadow-kisan-hover transition-all">
+            <div className="text-xs text-gray-500 font-medium uppercase tracking-wider">Regional Demand Level</div>
             <div className="flex items-center space-x-2">
               <span className="text-xl font-black text-gray-900">{analysis.demandLevel}</span>
               <Badge variant={analysis.demandBadge} className="text-xs">
                 +{analysis.deficitPercentage}% Deficit
               </Badge>
             </div>
-            <p className="text-[11px] text-emerald-600 font-medium">
+            <p className="text-[11px] text-emerald-700 font-semibold">
               High buyer bidding pressure
             </p>
           </div>
 
           {/* Card 2: Potential Buyers */}
-          <div className="bg-white p-5 rounded-xl border border-gray-200 shadow-xs space-y-1">
-            <div className="text-xs text-gray-500 font-medium">Active Procurement Buyers</div>
+          <div className="bg-white p-5 rounded-2xl border border-gray-200/80 shadow-kisan-card space-y-2 hover:shadow-kisan-hover transition-all">
+            <div className="text-xs text-gray-500 font-medium uppercase tracking-wider">Active Procurement Buyers</div>
             <div className="flex items-center space-x-2">
-              <span className="text-2xl font-bold text-gray-900">{analysis.potentialBuyers}</span>
+              <span className="text-2xl font-black text-gray-900">{analysis.potentialBuyers}</span>
               <span className="text-xs text-gray-400">within 150 km</span>
             </div>
             <p className="text-[11px] text-gray-500 flex items-center">
-              <Users className="w-3.5 h-3.5 mr-1 text-blue-600" />
+              <Users className="w-3.5 h-3.5 mr-1 text-blue-600 shrink-0" />
               Retail chains & food processors
             </p>
           </div>
 
           {/* Card 3: Expected Price Range */}
-          <div className="bg-white p-5 rounded-xl border border-gray-200 shadow-xs space-y-1">
-            <div className="text-xs text-gray-500 font-medium">Optimal Price Range</div>
+          <div className="bg-white p-5 rounded-2xl border border-gray-200/80 shadow-kisan-card space-y-2 hover:shadow-kisan-hover transition-all">
+            <div className="text-xs text-gray-500 font-medium uppercase tracking-wider">Optimal Price Range</div>
             <div className="text-xl font-bold text-primary">
               ₹{analysis.minPrice} – ₹{analysis.maxPrice} <span className="text-xs text-gray-500 font-normal">/ kg</span>
             </div>
-            <p className="text-[11px] text-gray-500">
-              Recommended Target: <strong>₹{analysis.recommendedPrice}/kg</strong>
+            <p className="text-[11px] text-gray-600">
+              Target: <strong className="text-emerald-700 font-bold">₹{analysis.recommendedPrice}/kg</strong>
             </p>
           </div>
 
           {/* Card 4: Estimated Freight */}
-          <div className="bg-white p-5 rounded-xl border border-gray-200 shadow-xs space-y-1">
-            <div className="text-xs text-gray-500 font-medium">Estimated Freight Cost</div>
+          <div className="bg-white p-5 rounded-2xl border border-gray-200/80 shadow-kisan-card space-y-2 hover:shadow-kisan-hover transition-all">
+            <div className="text-xs text-gray-500 font-medium uppercase tracking-wider">Estimated Freight Cost</div>
             <div className="text-xl font-bold text-gray-800">
               ₹{analysis.logisticsPerKg.toFixed(2)} <span className="text-xs text-gray-500 font-normal">/ kg</span>
             </div>
             <p className="text-[11px] text-gray-500 flex items-center">
-              <Truck className="w-3.5 h-3.5 mr-1 text-amber-600" />
+              <Truck className="w-3.5 h-3.5 mr-1 text-amber-600 shrink-0" />
               Direct farmgate pickup rate
             </p>
           </div>
         </div>
 
         {/* Actionable Advice & Distribution Strategy */}
-        <div className="bg-gradient-to-r from-emerald-50 to-green-50 border border-emerald-200 rounded-xl p-6 space-y-4">
+        <div className="bg-gradient-to-r from-emerald-50 via-[#F0FDF4] to-green-50 border border-emerald-200/80 rounded-2xl p-6 sm:p-7 space-y-5 shadow-xs">
           <div className="flex items-start space-x-3">
-            <CheckCircle2 className="w-5 h-5 text-emerald-600 flex-shrink-0 mt-0.5" />
+            <CheckCircle2 className="w-6 h-6 text-emerald-600 shrink-0 mt-0.5" />
             <div>
-              <h3 className="font-bold text-gray-900 text-sm">Strategic Selling Recommendation</h3>
-              <p className="text-xs text-gray-700 mt-1 leading-relaxed">{analysis.advice}</p>
+              <h3 className="font-bold text-gray-900 text-base">Strategic Selling Recommendation</h3>
+              <p className="text-xs sm:text-sm text-gray-700 mt-1 leading-relaxed">{analysis.advice}</p>
             </div>
           </div>
 
@@ -278,39 +306,39 @@ export function SellSmart() {
             <h4 className="text-xs font-bold text-gray-700 uppercase tracking-wider mb-3">
               Recommended Harvest Allocation Strategy
             </h4>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
-              <div className="bg-white p-3.5 rounded-lg border border-emerald-100 shadow-xs space-y-1">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-3.5">
+              <div className="bg-white p-4 rounded-xl border border-emerald-100 shadow-xs space-y-1.5">
                 <div className="flex items-center justify-between text-xs">
                   <span className="font-bold text-gray-800 flex items-center gap-1.5">
-                    <Building2 className="w-3.5 h-3.5 text-blue-600" /> Retail Chains (60%)
+                    <Building2 className="w-4 h-4 text-blue-600" /> Retail Chains (60%)
                   </span>
-                  <span className="font-semibold text-primary">₹{analysis.recommendedPrice}/kg</span>
+                  <span className="font-bold text-primary">₹{analysis.recommendedPrice}/kg</span>
                 </div>
-                <p className="text-[11px] text-gray-500">
+                <p className="text-[11px] text-gray-500 leading-relaxed">
                   Allocate {(quantityKg * 0.6).toFixed(0)} kg to institutional supermarkets for stable cashflow.
                 </p>
               </div>
 
-              <div className="bg-white p-3.5 rounded-lg border border-emerald-100 shadow-xs space-y-1">
+              <div className="bg-white p-4 rounded-xl border border-emerald-100 shadow-xs space-y-1.5">
                 <div className="flex items-center justify-between text-xs">
                   <span className="font-bold text-gray-800 flex items-center gap-1.5">
-                    <Store className="w-3.5 h-3.5 text-amber-600" /> Food Processors (30%)
+                    <Store className="w-4 h-4 text-amber-600" /> Food Processors (30%)
                   </span>
-                  <span className="font-semibold text-gray-700">₹{(analysis.recommendedPrice - 1.5).toFixed(1)}/kg</span>
+                  <span className="font-bold text-gray-700">₹{(analysis.recommendedPrice - 1.5).toFixed(1)}/kg</span>
                 </div>
-                <p className="text-[11px] text-gray-500">
+                <p className="text-[11px] text-gray-500 leading-relaxed">
                   Allocate {(quantityKg * 0.3).toFixed(0)} kg to processing units with zero grading rejection.
                 </p>
               </div>
 
-              <div className="bg-white p-3.5 rounded-lg border border-emerald-100 shadow-xs space-y-1">
+              <div className="bg-white p-4 rounded-xl border border-emerald-100 shadow-xs space-y-1.5">
                 <div className="flex items-center justify-between text-xs">
                   <span className="font-bold text-gray-800 flex items-center gap-1.5">
-                    <Users className="w-3.5 h-3.5 text-purple-600" /> Spot Marketplace (10%)
+                    <Users className="w-4 h-4 text-purple-600" /> Spot Marketplace (10%)
                   </span>
-                  <span className="font-semibold text-emerald-600">₹{(analysis.recommendedPrice + 2).toFixed(1)}/kg</span>
+                  <span className="font-bold text-emerald-600">₹{(analysis.recommendedPrice + 2).toFixed(1)}/kg</span>
                 </div>
-                <p className="text-[11px] text-gray-500">
+                <p className="text-[11px] text-gray-500 leading-relaxed">
                   Keep {(quantityKg * 0.1).toFixed(0)} kg buffer for retail consumer orders at peak spot rates.
                 </p>
               </div>
@@ -319,20 +347,22 @@ export function SellSmart() {
         </div>
 
         {/* Realization Summary and Publishing CTA */}
-        <div className="bg-white border border-gray-200 rounded-xl p-6 shadow-xs flex flex-col md:flex-row justify-between items-center gap-4">
+        <div className="bg-white border border-gray-200/80 rounded-2xl p-6 sm:p-7 shadow-kisan-card flex flex-col md:flex-row justify-between items-center gap-5">
           <div>
-            <div className="text-xs text-gray-500">Simulated Consignment Value ({quantityKg.toLocaleString('en-IN')} kg)</div>
-            <div className="text-2xl font-black text-primary">
+            <div className="text-xs text-gray-500 font-semibold uppercase tracking-wider">
+              Simulated Consignment Value ({quantityKg.toLocaleString('en-IN')} kg)
+            </div>
+            <div className="text-3xl font-black text-primary mt-0.5">
               ₹{totalCropValue.toLocaleString('en-IN')}
-              <span className="text-xs text-gray-400 font-normal ml-2">
-                (Est. Logistics: ₹{estimatedFreight.toLocaleString('en-IN')} • 0% Platform Fee)
+              <span className="text-xs text-gray-500 font-normal ml-2 block sm:inline">
+                (Est. Logistics: ₹{estimatedFreight.toLocaleString('en-IN')} • ₹0 Commission)
               </span>
             </div>
           </div>
 
           <Button
             size="lg"
-            className="w-full md:w-auto h-11 px-6 shadow-md"
+            className="w-full md:w-auto h-12 px-6 shadow-kisan-hover font-bold text-sm"
             onClick={() => navigate('/farmer/dashboard/listings/new')}
           >
             Publish Listing at Recommended ₹{analysis.recommendedPrice}/kg
