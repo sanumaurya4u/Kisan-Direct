@@ -34,11 +34,13 @@ export function LogisticsDashboard() {
       supabase.from('logistics_jobs').select('*', { count: 'exact', head: true }).eq('status', 'delivered'),
     ]).then(([active, avail, pend, comp]) => {
       setStats({
-        activeShipments: active.count || 1,
-        availableVehicles: avail.count || 2,
-        pendingJobs: pend.count || 1,
-        completedDeliveries: comp.count || 4,
+        activeShipments: active.count ?? 1,
+        availableVehicles: avail.count ?? 2,
+        pendingJobs: pend.count ?? 1,
+        completedDeliveries: comp.count ?? 4,
       });
+    }).catch(err => {
+      console.error('Failed to fetch dashboard metrics:', err);
     });
   }, []);
 

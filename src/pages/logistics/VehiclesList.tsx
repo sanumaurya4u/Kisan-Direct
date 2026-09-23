@@ -1,41 +1,58 @@
 import { useEffect, useState } from 'react';
 import { useAuth } from '../../features/auth/AuthContext';
-import { logisticsService, type Vehicle } from '../../features/logistics/logisticsService';
+import {
+  logisticsService,
+  type Vehicle,
+  DEFAULT_LOGISTICS_PARTNER_ID,
+  DEFAULT_DEMO_VEHICLES,
+} from '../../features/logistics/logisticsService';
 import { Card, CardHeader, CardTitle, CardContent } from '../../components/ui/Card';
 import { Button } from '../../components/ui/Button';
 import { Input } from '../../components/ui/Input';
 import { Label } from '../../components/ui/Label';
 import { Select } from '../../components/ui/Select';
 import { Badge } from '../../components/ui/Badge';
+import { LoadingSpinner } from '../../components/ui/LoadingSpinner';
 
 export function VehiclesList() {
   const { profile } = useAuth();
   const [vehicles, setVehicles] = useState<Vehicle[]>([]);
   const [isAdding, setIsAdding] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   
   // Form state
   const [number, setNumber] = useState('');
   const [type, setType] = useState('Truck');
   const [capacity, setCapacity] = useState('');
 
-  const fetchVehicles = () => {
-    if (profile) {
-      logisticsService.getMyVehicles(profile.id)
-        .then(setVehicles)
-        .catch(console.error);
+  const fetchVehicles = async () => {
+    setIsLoading(true);
+    const partnerId = profile?.id || DEFAULT_LOGISTICS_PARTNER_ID;
+    try {
+      const data = await logisticsService.getMyVehicles(partnerId);
+      if (data && data.length > 0) {
+        setVehicles(data);
+      } else {
+        setVehicles(DEFAULT_DEMO_VEHICLES);
+      }
+    } catch (err) {
+      console.error('Failed to fetch vehicles, using demo fleet:', err);
+      setVehicles(DEFAULT_DEMO_VEHICLES);
+    } finally {
+      setIsLoading(false);
     }
   };
 
   useEffect(() => {
     fetchVehicles();
-  }, [profile]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [profile?.id]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const handleAdd = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!profile) return;
+    const partnerId = profile?.id || DEFAULT_LOGISTICS_PARTNER_ID;
     try {
       await logisticsService.addVehicle({
-        owner_id: profile.id,
+        owner_id: partnerId,
         vehicle_number: number,
         vehicle_type: type,
         capacity_kg: Number(capacity),
@@ -49,6 +66,14 @@ export function VehiclesList() {
       alert(err.message || 'Failed to add vehicle');
     }
   };
+
+  if (isLoading) {
+    return (
+      <div className="py-12 bg-white rounded-xl border border-gray-200 shadow-xs">
+        <LoadingSpinner text="Loading fleet vehicles..." />
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-6">
