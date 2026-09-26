@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import { useNavigate, Link, useSearchParams } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
@@ -9,6 +9,7 @@ import { Button } from '../../components/ui/Button';
 import { Input } from '../../components/ui/Input';
 import { Label } from '../../components/ui/Label';
 import { Select } from '../../components/ui/Select';
+import { CheckCircle2 } from 'lucide-react';
 
 const registerSchema = z.object({
   fullName: z.string().min(2, { message: "Name must be at least 2 characters" }),
@@ -21,35 +22,81 @@ type RegisterFormValues = z.infer<typeof registerSchema>;
 
 export function Register() {
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
   const [errorMsg, setErrorMsg] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [successNotice, setSuccessNotice] = useState<string | null>(null);
 
-  const { register, handleSubmit, formState: { errors } } = useForm<RegisterFormValues>({
+  const initialRoleParam = searchParams.get('role');
+  const validRole = (initialRoleParam && ['farmer', 'fpo', 'consumer', 'bulk_buyer', 'logistics_partner'].includes(initialRoleParam))
+    ? (initialRoleParam as RegisterFormValues['role'])
+    : 'consumer';
+
+  const { register, handleSubmit, setValue, formState: { errors } } = useForm<RegisterFormValues>({
     resolver: zodResolver(registerSchema),
     defaultValues: {
-      role: 'consumer'
+      role: validRole
     }
   });
+
+  useEffect(() => {
+    if (initialRoleParam && ['farmer', 'fpo', 'consumer', 'bulk_buyer', 'logistics_partner'].includes(initialRoleParam)) {
+      setValue('role', initialRoleParam as RegisterFormValues['role']);
+    }
+  }, [initialRoleParam, setValue]);
+
+  const getRoleDashboard = (role: RegisterFormValues['role']) => {
+    switch (role) {
+      case 'farmer': return '/farmer/dashboard';
+      case 'fpo': return '/fpo/dashboard';
+      case 'bulk_buyer': return '/buyer/dashboard';
+      case 'logistics_partner': return '/logistics/dashboard';
+      case 'consumer': return '/marketplace';
+      default: return '/marketplace';
+    }
+  };
 
   const onSubmit = async (data: RegisterFormValues) => {
     setIsLoading(true);
     setErrorMsg('');
-    const { error } = await supabase.auth.signUp({
-      email: data.email,
-      password: data.password,
-      options: {
-        data: {
-          full_name: data.fullName,
-          role: data.role,
-        }
-      }
-    });
+    setSuccessNotice(null);
 
-    if (error) {
-      setErrorMsg(error.message);
+    try {
+      const { data: authData, error: signUpError } = await supabase.auth.signUp({
+        email: data.email,
+        password: data.password,
+        options: {
+          data: {
+            full_name: data.fullName,
+            role: data.role,
+          }
+        }
+      });
+
+      if (signUpError) throw signUpError;
+
+      // Auto-login to session
+      try {
+        const { error: signInError } = await supabase.auth.signInWithPassword({
+          email: data.email,
+          password: data.password,
+        });
+
+        if (!signInError && authData.session) {
+          navigate(getRoleDashboard(data.role));
+          return;
+        }
+      } catch {
+        // If auto-login fails due to confirmation setting, fallback to login page
+      }
+
+      setSuccessNotice('Account created successfully! Redirecting to login...');
+      setTimeout(() => navigate('/login'), 1500);
+    } catch (err: unknown) {
+      const msg = err instanceof Error ? err.message : 'Registration failed. Please try again.';
+      setErrorMsg(msg);
+    } finally {
       setIsLoading(false);
-    } else {
-      navigate('/login');
     }
   };
 
@@ -68,6 +115,13 @@ export function Register() {
 
         <CardContent className="p-6 sm:p-7">
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+            {successNotice && (
+              <div className="p-3.5 bg-emerald-50 border border-emerald-300 text-emerald-800 rounded-xl text-sm font-semibold flex items-center gap-2">
+                <CheckCircle2 className="w-5 h-5 text-primary flex-shrink-0" />
+                <span>{successNotice}</span>
+              </div>
+            )}
+
             {errorMsg && (
               <div className="p-3.5 bg-red-50 border border-red-200 text-red-700 rounded-xl text-sm font-medium">
                 {errorMsg}
@@ -122,8 +176,8 @@ export function Register() {
               {errors.role && <p className="text-xs text-red-600 font-medium">{errors.role.message}</p>}
             </div>
 
-            <Button type="submit" className="w-full h-11 shadow-kisan-hover font-bold text-sm mt-2" disabled={isLoading}>
-              {isLoading ? 'Registering Account...' : 'Create Kisan Direct Account'}
+            <Button type="submit" className="w-full h-11 shadow-kisan-hover font-bold text-sm mt-2 cursor-pointer" disabled={isLoading}>
+              {isLoading ? 'Creating Account & Setting Up...' : 'Create Kisan Direct Account'}
             </Button>
           </form>
         </CardContent>

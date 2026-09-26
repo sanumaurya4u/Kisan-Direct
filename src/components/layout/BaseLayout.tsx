@@ -123,17 +123,47 @@ export function BaseLayout() {
                   : 'text-emerald-100 hover:text-white hover:bg-white/10'
               }`}
             >
-              {currentLang === 'EN' ? 'Buy Produce' : 'फसल खरीदें'}
+              {currentLang === 'EN' ? 'Marketplace' : 'मंडी / बाज़ार'}
             </Link>
             <Link
-              to={user ? (profile?.role === 'farmer' || profile?.role === 'fpo' ? '/farmer/dashboard/listings/new' : '/farmer/sell-smart') : '/login'}
+              to="/prices"
               className={`px-3 py-1.5 text-xs font-semibold rounded-full transition-all ${
-                isActiveLink('/farmer/sell-smart') || isActiveLink('/farmer/dashboard/listings')
+                isActiveLink('/prices')
                   ? 'bg-white text-primary shadow-xs font-bold'
                   : 'text-emerald-100 hover:text-white hover:bg-white/10'
               }`}
             >
-              {currentLang === 'EN' ? 'Sell Produce' : 'फसल बेचें'}
+              {currentLang === 'EN' ? 'Prices' : 'भाव बेंचमार्क'}
+            </Link>
+            <Link
+              to="/demand"
+              className={`px-3 py-1.5 text-xs font-semibold rounded-full transition-all ${
+                isActiveLink('/demand')
+                  ? 'bg-white text-primary shadow-xs font-bold'
+                  : 'text-emerald-100 hover:text-white hover:bg-white/10'
+              }`}
+            >
+              {currentLang === 'EN' ? 'Demand' : 'मांग पूर्वानुमान'}
+            </Link>
+            <Link
+              to="/logistics"
+              className={`px-3 py-1.5 text-xs font-semibold rounded-full transition-all ${
+                isActiveLink('/logistics')
+                  ? 'bg-white text-primary shadow-xs font-bold'
+                  : 'text-emerald-100 hover:text-white hover:bg-white/10'
+              }`}
+            >
+              {currentLang === 'EN' ? 'Logistics' : 'लॉजिस्टिक्स'}
+            </Link>
+            <Link
+              to="/ai-match"
+              className={`px-3 py-1.5 text-xs font-semibold rounded-full transition-all ${
+                isActiveLink('/ai-match')
+                  ? 'bg-white text-primary shadow-xs font-bold'
+                  : 'text-emerald-100 hover:text-white hover:bg-white/10'
+              }`}
+            >
+              {currentLang === 'EN' ? 'AI Match' : 'एआई मैचिंग'}
             </Link>
             <Link
               to="/about"
@@ -143,17 +173,7 @@ export function BaseLayout() {
                   : 'text-emerald-100 hover:text-white hover:bg-white/10'
               }`}
             >
-              {currentLang === 'EN' ? 'How It Works' : 'कैसे काम करता है'}
-            </Link>
-            <Link
-              to="/analytics"
-              className={`px-3 py-1.5 text-xs font-semibold rounded-full transition-all ${
-                isActiveLink('/analytics')
-                  ? 'bg-white text-primary shadow-xs font-bold'
-                  : 'text-emerald-100 hover:text-white hover:bg-white/10'
-              }`}
-            >
-              {currentLang === 'EN' ? 'Market Prices' : 'मंडी भाव व मांग'}
+              {currentLang === 'EN' ? 'About' : 'परिचय'}
             </Link>
           </nav>
 
@@ -295,14 +315,35 @@ export function BaseLayout() {
                 onClick={() => setIsMobileNavOpen(false)}
                 className="px-3 py-2 rounded-lg text-sm font-semibold text-white hover:bg-white/10"
               >
-                🛒 Buy Produce (Marketplace)
+                🛒 Marketplace
               </Link>
               <Link
-                to={user ? '/farmer/sell-smart' : '/login'}
+                to="/prices"
                 onClick={() => setIsMobileNavOpen(false)}
                 className="px-3 py-2 rounded-lg text-sm font-semibold text-white hover:bg-white/10"
               >
-                🌾 Sell Produce
+                💰 Price Intelligence & Benchmark
+              </Link>
+              <Link
+                to="/demand"
+                onClick={() => setIsMobileNavOpen(false)}
+                className="px-3 py-2 rounded-lg text-sm font-semibold text-white hover:bg-white/10"
+              >
+                📈 Demand Forecasting & Trends
+              </Link>
+              <Link
+                to="/logistics"
+                onClick={() => setIsMobileNavOpen(false)}
+                className="px-3 py-2 rounded-lg text-sm font-semibold text-white hover:bg-white/10"
+              >
+                🚚 Logistics & Route Map
+              </Link>
+              <Link
+                to="/ai-match"
+                onClick={() => setIsMobileNavOpen(false)}
+                className="px-3 py-2 rounded-lg text-sm font-semibold text-white hover:bg-white/10"
+              >
+                ⚡ AI Match Studio
               </Link>
               <Link
                 to="/about"
@@ -310,13 +351,6 @@ export function BaseLayout() {
                 className="px-3 py-2 rounded-lg text-sm font-semibold text-white hover:bg-white/10"
               >
                 💡 How It Works
-              </Link>
-              <Link
-                to="/analytics"
-                onClick={() => setIsMobileNavOpen(false)}
-                className="px-3 py-2 rounded-lg text-sm font-semibold text-white hover:bg-white/10"
-              >
-                📈 Market Prices & Demand
               </Link>
             </nav>
 

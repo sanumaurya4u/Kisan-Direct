@@ -4,6 +4,12 @@ import { ProtectedRoute } from './components/layout/ProtectedRoute';
 import { Home } from './pages/public/Home';
 import { Login } from './pages/auth/Login';
 import { Register } from './pages/auth/Register';
+import { Marketplace } from './pages/public/Marketplace';
+import { PriceIntelligence } from './pages/public/PriceIntelligence';
+import { DemandIntelligence } from './pages/public/DemandIntelligence';
+import { AIMatchStudio } from './pages/public/AIMatchStudio';
+import { LogisticsHub } from './pages/public/LogisticsHub';
+import { About } from './pages/public/About';
 import { FarmerDashboard } from './pages/farmer/FarmerDashboard';
 import { FarmerProduce } from './pages/farmer/FarmerProduce';
 import { SellSmart } from './pages/farmer/SellSmart';
@@ -11,7 +17,6 @@ import { ListingForm } from './pages/farmer/ListingForm';
 import { FPODashboard } from './pages/fpo/FPODashboard';
 import { BuyerDashboard } from './pages/buyer/BuyerDashboard';
 import { RequirementForm } from './pages/buyer/RequirementForm';
-import { Marketplace } from './pages/public/Marketplace';
 import { MatchesView } from './pages/buyer/MatchesView';
 import { BuyerOrders } from './pages/buyer/BuyerOrders';
 import { FarmerOrders } from './pages/farmer/FarmerOrders';
@@ -20,7 +25,6 @@ import { RouteOptimizationView } from './pages/logistics/RouteOptimizationView';
 import { AnalyticsDashboard } from './pages/analytics/AnalyticsDashboard';
 import { AdminDashboard } from './pages/admin/AdminDashboard';
 import { ProfilePage } from './pages/profile/ProfilePage';
-import { About } from './pages/public/About';
 import { AuthProvider } from './features/auth/AuthContext';
 
 function App() {
@@ -28,11 +32,15 @@ function App() {
     <AuthProvider>
       <Routes>
         <Route path="/" element={<BaseLayout />}>
-          {/* Public Routes */}
+          {/* Public First-Class Core Routes */}
           <Route index element={<Home />} />
           <Route path="login" element={<Login />} />
           <Route path="register" element={<Register />} />
           <Route path="marketplace" element={<Marketplace />} />
+          <Route path="prices" element={<PriceIntelligence />} />
+          <Route path="demand" element={<DemandIntelligence />} />
+          <Route path="logistics" element={<LogisticsHub />} />
+          <Route path="ai-match" element={<AIMatchStudio />} />
           <Route path="about" element={<About />} />
 
           {/* Farmer Routes */}

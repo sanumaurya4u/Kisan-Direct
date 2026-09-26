@@ -16,9 +16,27 @@ import {
 import { Button } from '../../components/ui/Button';
 import { Card, CardContent } from '../../components/ui/Card';
 import { Badge } from '../../components/ui/Badge';
+import { supabase } from '../../lib/supabase';
 
 export function Home() {
   const navigate = useNavigate();
+  const [isLoggingIn, setIsLoggingIn] = useState<string | null>(null);
+
+  const handleDemoLogin = async (email: string, targetPath: string) => {
+    setIsLoggingIn(email);
+    try {
+      await supabase.auth.signInWithPassword({
+        email,
+        password: 'Demo@1234',
+      });
+      navigate(targetPath);
+    } catch (err) {
+      console.error('Demo login error', err);
+      navigate(targetPath);
+    } finally {
+      setIsLoggingIn(null);
+    }
+  };
 
   // Interactive Price Ledger Simulator State
   const [cropPrice, setCropPrice] = useState<number>(30); // ₹ per kg
@@ -243,8 +261,8 @@ export function Home() {
               Understand current crop prices and 90-day wholesale demand curves. Our AI engine guides you on when and where to sell.
             </p>
             <div className="pt-2">
-              <Link to="/analytics" className="text-xs font-bold text-primary flex items-center hover:underline">
-                View Price Trends <ChevronRight className="w-3.5 h-3.5 ml-1" />
+              <Link to="/prices" className="text-xs font-bold text-primary flex items-center hover:underline">
+                View Price Benchmarks <ChevronRight className="w-3.5 h-3.5 ml-1" />
               </Link>
             </div>
           </div>
@@ -254,13 +272,13 @@ export function Home() {
             <div className="w-12 h-12 rounded-2xl bg-emerald-50 text-emerald-800 flex items-center justify-center font-bold text-xl">
               🤝
             </div>
-            <h3 className="text-lg font-bold text-gray-900">Direct Connection</h3>
+            <h3 className="text-lg font-bold text-gray-900">Direct Connection & AI Match</h3>
             <p className="text-xs text-gray-600 leading-relaxed">
               Connect farmers and buyers without unnecessary layers of middlemen. Direct communication and automated requirement matching.
             </p>
             <div className="pt-2">
-              <Link to="/about" className="text-xs font-bold text-primary flex items-center hover:underline">
-                How Matching Works <ChevronRight className="w-3.5 h-3.5 ml-1" />
+              <Link to="/ai-match" className="text-xs font-bold text-primary flex items-center hover:underline">
+                Explore AI Match Studio <ChevronRight className="w-3.5 h-3.5 ml-1" />
               </Link>
             </div>
           </div>
@@ -275,8 +293,8 @@ export function Home() {
               Orders automatically trigger pickup by verified fleet partners. Real-time GPS map tracking and temperature-monitored transit.
             </p>
             <div className="pt-2">
-              <Link to="/logistics/dashboard" className="text-xs font-bold text-primary flex items-center hover:underline">
-                Fleet Tracking Details <ChevronRight className="w-3.5 h-3.5 ml-1" />
+              <Link to="/logistics" className="text-xs font-bold text-primary flex items-center hover:underline">
+                Fleet & Route Map Details <ChevronRight className="w-3.5 h-3.5 ml-1" />
               </Link>
             </div>
           </div>
@@ -618,7 +636,7 @@ export function Home() {
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {/* Card 1: Farmer & FPO */}
-          <Card className="hover:shadow-lg transition-all duration-300 border-t-4 border-t-emerald-600 rounded-2xl">
+          <Card className="hover:shadow-lg transition-all duration-300 border-t-4 border-t-emerald-600 rounded-2xl flex flex-col justify-between">
             <CardContent className="p-6 space-y-4">
               <div className="w-12 h-12 rounded-2xl bg-emerald-100 text-primary flex items-center justify-center">
                 <Tractor className="w-6 h-6" />
@@ -627,19 +645,27 @@ export function Home() {
               <p className="text-xs text-gray-600 leading-relaxed">
                 List harvested lots directly, view regional buyer demand before harvest, and access AI-driven "Sell Smart" price optimization.
               </p>
-              <div className="pt-2">
+              <div className="pt-2 space-y-2">
                 <Button
-                  className="w-full font-bold"
-                  onClick={() => navigate('/login')}
+                  className="w-full font-bold cursor-pointer"
+                  disabled={isLoggingIn === 'farmer@kisandirect.com'}
+                  onClick={() => handleDemoLogin('farmer@kisandirect.com', '/farmer/dashboard')}
                 >
-                  Enter Farmer Portal
+                  {isLoggingIn === 'farmer@kisandirect.com' ? 'Logging In...' : '🌾 1-Click Demo Farmer'}
+                </Button>
+                <Button
+                  variant="outline"
+                  className="w-full font-semibold text-xs border-emerald-300 text-emerald-800 hover:bg-emerald-50 cursor-pointer"
+                  onClick={() => navigate('/register?role=farmer')}
+                >
+                  Register as Farmer
                 </Button>
               </div>
             </CardContent>
           </Card>
 
           {/* Card 2: Bulk Buyers */}
-          <Card className="hover:shadow-lg transition-all duration-300 border-t-4 border-t-blue-600 rounded-2xl">
+          <Card className="hover:shadow-lg transition-all duration-300 border-t-4 border-t-blue-600 rounded-2xl flex flex-col justify-between">
             <CardContent className="p-6 space-y-4">
               <div className="w-12 h-12 rounded-2xl bg-blue-100 text-blue-700 flex items-center justify-center">
                 <ShoppingCart className="w-6 h-6" />
@@ -648,20 +674,27 @@ export function Home() {
               <p className="text-xs text-gray-600 leading-relaxed">
                 Post purchase requirements for retail hypermarkets or food processing units. Connect with verified farmer lots with live match scoring.
               </p>
-              <div className="pt-2">
+              <div className="pt-2 space-y-2">
+                <Button
+                  className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold cursor-pointer"
+                  disabled={isLoggingIn === 'buyer@kisandirect.com'}
+                  onClick={() => handleDemoLogin('buyer@kisandirect.com', '/buyer/dashboard')}
+                >
+                  {isLoggingIn === 'buyer@kisandirect.com' ? 'Logging In...' : '🛒 1-Click Demo Buyer'}
+                </Button>
                 <Button
                   variant="outline"
-                  className="w-full border-blue-600 text-blue-700 hover:bg-blue-50 font-bold"
-                  onClick={() => navigate('/login')}
+                  className="w-full font-semibold text-xs border-blue-300 text-blue-800 hover:bg-blue-50 cursor-pointer"
+                  onClick={() => navigate('/register?role=bulk_buyer')}
                 >
-                  Enter Buyer Portal
+                  Register as Buyer
                 </Button>
               </div>
             </CardContent>
           </Card>
 
           {/* Card 3: Logistics Partners */}
-          <Card className="hover:shadow-lg transition-all duration-300 border-t-4 border-t-amber-600 rounded-2xl">
+          <Card className="hover:shadow-lg transition-all duration-300 border-t-4 border-t-amber-600 rounded-2xl flex flex-col justify-between">
             <CardContent className="p-6 space-y-4">
               <div className="w-12 h-12 rounded-2xl bg-amber-100 text-amber-700 flex items-center justify-center">
                 <Truck className="w-6 h-6" />
@@ -670,13 +703,20 @@ export function Home() {
               <p className="text-xs text-gray-600 leading-relaxed">
                 Register vehicles (Tata 407, Bolero Maxi, Reefer), accept automated farmgate pickup jobs, and visualize Leaflet map routes.
               </p>
-              <div className="pt-2">
+              <div className="pt-2 space-y-2">
+                <Button
+                  className="w-full bg-amber-600 hover:bg-amber-700 text-white font-bold cursor-pointer"
+                  disabled={isLoggingIn === 'logistics@kisandirect.com'}
+                  onClick={() => handleDemoLogin('logistics@kisandirect.com', '/logistics/dashboard')}
+                >
+                  {isLoggingIn === 'logistics@kisandirect.com' ? 'Logging In...' : '🚚 1-Click Demo Fleet'}
+                </Button>
                 <Button
                   variant="outline"
-                  className="w-full border-amber-600 text-amber-700 hover:bg-amber-50 font-bold"
-                  onClick={() => navigate('/login')}
+                  className="w-full font-semibold text-xs border-amber-300 text-amber-800 hover:bg-amber-50 cursor-pointer"
+                  onClick={() => navigate('/logistics')}
                 >
-                  Enter Logistics Fleet
+                  View Fleet & Route Map
                 </Button>
               </div>
             </CardContent>
@@ -696,7 +736,7 @@ export function Home() {
           <div className="flex flex-col sm:flex-row justify-center gap-3 pt-2">
             <Button
               size="lg"
-              className="bg-fresh hover:bg-fresh-hover text-slate-950 font-black h-12 px-8 rounded-xl shadow-md"
+              className="bg-fresh hover:bg-fresh-hover text-slate-950 font-black h-12 px-6 rounded-xl shadow-md cursor-pointer"
               onClick={() => navigate('/marketplace')}
             >
               Browse Fresh Marketplace
@@ -704,10 +744,18 @@ export function Home() {
             <Button
               size="lg"
               variant="outline"
-              className="bg-white/10 hover:bg-white/20 text-white border-white/30 h-12 px-8 rounded-xl"
-              onClick={() => navigate('/register')}
+              className="bg-white/10 hover:bg-white/20 text-white border-white/30 h-12 px-6 rounded-xl font-bold cursor-pointer"
+              onClick={() => navigate('/register?role=farmer')}
             >
-              Join as a Farmer / Buyer
+              Register as Farmer
+            </Button>
+            <Button
+              size="lg"
+              variant="outline"
+              className="bg-white/10 hover:bg-white/20 text-white border-white/30 h-12 px-6 rounded-xl font-bold cursor-pointer"
+              onClick={() => navigate('/register?role=bulk_buyer')}
+            >
+              Register as Buyer
             </Button>
           </div>
         </div>

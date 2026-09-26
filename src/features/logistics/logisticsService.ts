@@ -187,11 +187,26 @@ export const logisticsService = {
   },
 
   async updateJobStatus(jobId: string, status: LogisticsJob['status'], vehicleId?: string) {
-    const { error } = await supabase
+    const { data: job, error } = await supabase
       .from('logistics_jobs')
       .update({ status })
-      .eq('id', jobId);
+      .eq('id', jobId)
+      .select('order_id')
+      .single();
     if (error) throw error;
+
+    // Automatically synchronize parent order status for full supply chain consistency
+    if (job?.order_id) {
+      try {
+        if (status === 'in_transit') {
+          await supabase.from('orders').update({ status: 'in_transit' }).eq('id', job.order_id);
+        } else if (status === 'delivered') {
+          await supabase.from('orders').update({ status: 'delivered' }).eq('id', job.order_id);
+        }
+      } catch (orderSyncErr) {
+        console.warn('Non-blocking order status sync warning:', orderSyncErr);
+      }
+    }
 
     if (status === 'delivered' || status === 'cancelled') {
       // Free up vehicle

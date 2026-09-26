@@ -44,15 +44,32 @@ export function BuyerOrders() {
   const [orders, setOrders] = useState<Order[]>([]);
   const [filterStatus, setFilterStatus] = useState<string>('all');
   const [isLoading, setIsLoading] = useState(true);
+  const [confirmingOrderId, setConfirmingOrderId] = useState<string | null>(null);
 
-  useEffect(() => {
+  const fetchOrders = () => {
     if (profile) {
       ordersService.getMyOrders(profile.id, profile.role)
         .then(setOrders)
         .catch(console.error)
         .finally(() => setIsLoading(false));
     }
-  }, [profile]);
+  };
+
+  useEffect(() => {
+    fetchOrders();
+  }, [profile]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  const handleConfirmDelivery = async (orderId: string) => {
+    setConfirmingOrderId(orderId);
+    try {
+      await ordersService.updateOrderStatus(orderId, 'delivered');
+      fetchOrders();
+    } catch (err) {
+      console.error('Failed to confirm delivery', err);
+    } finally {
+      setConfirmingOrderId(null);
+    }
+  };
 
   const filteredOrders = orders.filter((o) => {
     if (filterStatus === 'active') {
@@ -310,6 +327,36 @@ export function BuyerOrders() {
                       </div>
                     </div>
                   </div>
+
+                  {/* Order Action Strip for In-Transit & Delivered States */}
+                  {order.status === 'in_transit' && (
+                    <div className="pt-4 border-t border-gray-100 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
+                      <div className="text-xs text-blue-800 font-semibold flex items-center gap-1.5">
+                        <Truck className="w-4 h-4 text-blue-600 animate-pulse" />
+                        <span>Shipment is currently in transit with logistics fleet partner.</span>
+                      </div>
+                      <Button
+                        size="sm"
+                        onClick={() => handleConfirmDelivery(order.id)}
+                        disabled={confirmingOrderId === order.id}
+                        className="bg-primary hover:bg-emerald-700 text-white font-bold text-xs h-9 px-4 rounded-xl shadow-xs cursor-pointer"
+                      >
+                        {confirmingOrderId === order.id ? 'Releasing Escrow...' : '✓ Confirm Delivery & Release Escrow'}
+                      </Button>
+                    </div>
+                  )}
+
+                  {(order.status === 'delivered' || order.status === 'completed') && (
+                    <div className="pt-3 border-t border-emerald-100 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 text-xs text-emerald-900 bg-emerald-50/80 p-3 rounded-xl font-medium">
+                      <span className="flex items-center gap-1.5 font-bold">
+                        <CheckCircle2 className="w-4 h-4 text-primary" />
+                        <span>Consignment successfully received & verified at destination warehouse.</span>
+                      </span>
+                      <Badge variant="success" className="text-[10px] font-bold">
+                        100% Escrow Released to Producer
+                      </Badge>
+                    </div>
+                  )}
                 </CardContent>
               </Card>
             );

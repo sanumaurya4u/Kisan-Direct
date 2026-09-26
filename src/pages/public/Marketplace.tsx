@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { marketplaceService } from '../../features/marketplace/marketplaceService';
 import { ordersService } from '../../features/orders/ordersService';
 import { useAuth } from '../../features/auth/AuthContext';
+import { supabase } from '../../lib/supabase';
 import { Card, CardContent } from '../../components/ui/Card';
 import { Input } from '../../components/ui/Input';
 import { Label } from '../../components/ui/Label';
@@ -121,12 +122,41 @@ export function Marketplace() {
     setOrderSuccessId(null);
   };
 
+  const [orderErrorMsg, setOrderErrorMsg] = useState<string | null>(null);
+
+  const handleDemoAuthAndPlaceOrder = async (email: string) => {
+    if (!selectedListing) return;
+    setOrderErrorMsg(null);
+    setIsPlacingOrder(true);
+    try {
+      const { data: authData, error: authError } = await supabase.auth.signInWithPassword({
+        email,
+        password: 'Demo@1234',
+      });
+      if (authError || !authData.user) throw authError || new Error('Authentication failed');
+      
+      const order = await ordersService.createOrderFromListing(
+        selectedListing as any, // eslint-disable-line @typescript-eslint/no-explicit-any
+        authData.user.id,
+        orderQuantity,
+        deliveryAddress || 'Azadpur Central Warehouse, Delhi'
+      );
+      setOrderSuccessId(order.id);
+      fetchListings();
+    } catch (err: unknown) {
+      const msg = err instanceof Error ? err.message : 'Failed to place order';
+      setOrderErrorMsg(msg);
+    } finally {
+      setIsPlacingOrder(false);
+    }
+  };
+
   const handlePlaceOrder = async () => {
     if (!selectedListing) return;
+    setOrderErrorMsg(null);
 
     if (!user) {
-      alert('Please log in as a Buyer or Consumer to place an order.');
-      navigate('/login');
+      setOrderErrorMsg('Please select a quick demo persona below or sign in to complete your order.');
       return;
     }
 
@@ -137,13 +167,13 @@ export function Marketplace() {
         selectedListing as any, // eslint-disable-line @typescript-eslint/no-explicit-any
         user.id,
         orderQuantity,
-        deliveryAddress
+        deliveryAddress || 'Central Distribution Hub, Mumbai'
       );
       setOrderSuccessId(order.id);
       fetchListings(); // Refresh stock
-    } catch (err) {
-      console.error(err);
-      alert('Failed to place order. Please check console for details.');
+    } catch (err: unknown) {
+      const msg = err instanceof Error ? err.message : 'Failed to place order.';
+      setOrderErrorMsg(msg);
     } finally {
       setIsPlacingOrder(false);
     }
@@ -546,9 +576,49 @@ export function Marketplace() {
                     </div>
                   )}
 
+                  {/* In-Modal 1-Click Persona Authentication for Evaluators & Guests */}
+                  {!user && (
+                    <div className="p-3.5 bg-amber-50 border border-amber-200 rounded-xl space-y-2 text-xs">
+                      <div className="font-bold text-amber-900 flex items-center gap-1.5">
+                        <Sparkles className="w-4 h-4 text-amber-700" />
+                        <span>SIH Evaluator Quick Checkout (1-Click Login):</span>
+                      </div>
+                      <p className="text-amber-800 text-[11px]">
+                        Authenticate seamlessly as a demo buyer to complete real Supabase order creation and farmgate dispatch:
+                      </p>
+                      <div className="flex flex-col sm:flex-row gap-2 pt-1">
+                        <Button
+                          type="button"
+                          size="sm"
+                          disabled={isPlacingOrder}
+                          onClick={() => handleDemoAuthAndPlaceOrder('buyer@kisandirect.com')}
+                          className="bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs flex-1 cursor-pointer"
+                        >
+                          🛒 Continue as Demo Buyer
+                        </Button>
+                        <Button
+                          type="button"
+                          size="sm"
+                          variant="outline"
+                          disabled={isPlacingOrder}
+                          onClick={() => handleDemoAuthAndPlaceOrder('consumer@kisandirect.com')}
+                          className="border-emerald-600 text-emerald-800 font-bold text-xs flex-1 cursor-pointer"
+                        >
+                          👤 Continue as Demo Consumer
+                        </Button>
+                      </div>
+                    </div>
+                  )}
+
+                  {orderErrorMsg && (
+                    <div className="p-3 bg-red-50 border border-red-200 text-red-700 rounded-xl text-xs font-semibold">
+                      {orderErrorMsg}
+                    </div>
+                  )}
+
                   {/* Submit Button */}
                   <Button
-                    className="w-full h-11 text-sm font-bold shadow-md"
+                    className="w-full h-11 text-sm font-bold shadow-md cursor-pointer"
                     onClick={handlePlaceOrder}
                     disabled={isPlacingOrder}
                   >
