@@ -46,17 +46,19 @@ DECLARE
 BEGIN
 
   -- 1. Create Auth Users
-  INSERT INTO auth.users (id, instance_id, aud, role, email, encrypted_password, email_confirmed_at, raw_app_meta_data, raw_user_meta_data, created_at, updated_at)
+  INSERT INTO auth.users (id, instance_id, aud, role, email, encrypted_password, email_confirmed_at, raw_app_meta_data, raw_user_meta_data, created_at, updated_at, confirmation_token, recovery_token, email_change_token_new, email_change_token_current, reauthentication_token, email_change, phone_change, phone_change_token)
   VALUES
-    (v_farmer_id, '00000000-0000-0000-0000-000000000000', 'authenticated', 'authenticated', 'farmer@kisandirect.com', crypt('Demo@1234', gen_salt('bf')), now(), '{"provider":"email"}', '{"full_name":"Ramesh Patel (Farmer)","role":"farmer"}', now(), now()),
-    (v_fpo_id, '00000000-0000-0000-0000-000000000000', 'authenticated', 'authenticated', 'fpo@kisandirect.com', crypt('Demo@1234', gen_salt('bf')), now(), '{"provider":"email"}', '{"full_name":"Sahyadri Kisan FPO","role":"fpo"}', now(), now()),
-    (v_buyer_id, '00000000-0000-0000-0000-000000000000', 'authenticated', 'authenticated', 'buyer@kisandirect.com', crypt('Demo@1234', gen_salt('bf')), now(), '{"provider":"email"}', '{"full_name":"Arvind Sharma (FreshRetail)","role":"bulk_buyer"}', now(), now()),
-    (v_logistics_id, '00000000-0000-0000-0000-000000000000', 'authenticated', 'authenticated', 'logistics@kisandirect.com', crypt('Demo@1234', gen_salt('bf')), now(), '{"provider":"email"}', '{"full_name":"Vikram Singh (Kisan Express)","role":"logistics_partner"}', now(), now()),
-    (v_admin_id, '00000000-0000-0000-0000-000000000000', 'authenticated', 'authenticated', 'admin@kisandirect.com', crypt('Demo@1234', gen_salt('bf')), now(), '{"provider":"email"}', '{"full_name":"Dr. Rajesh Verma (SIH Admin)","role":"admin"}', now(), now()),
-    (v_consumer_id, '00000000-0000-0000-0000-000000000000', 'authenticated', 'authenticated', 'consumer@kisandirect.com', crypt('Demo@1234', gen_salt('bf')), now(), '{"provider":"email"}', '{"full_name":"Anita Deshmukh (Consumer)","role":"consumer"}', now(), now())
+    (v_farmer_id, '00000000-0000-0000-0000-000000000000', 'authenticated', 'authenticated', 'farmer@kisandirect.com', crypt('Demo@1234', gen_salt('bf')), now(), '{"provider":"email"}', '{"full_name":"Ramesh Patel (Farmer)","role":"farmer"}', now(), now(), '', '', '', '', '', '', '', ''),
+    (v_fpo_id, '00000000-0000-0000-0000-000000000000', 'authenticated', 'authenticated', 'fpo@kisandirect.com', crypt('Demo@1234', gen_salt('bf')), now(), '{"provider":"email"}', '{"full_name":"Sahyadri Kisan FPO","role":"fpo"}', now(), now(), '', '', '', '', '', '', '', ''),
+    (v_buyer_id, '00000000-0000-0000-0000-000000000000', 'authenticated', 'authenticated', 'buyer@kisandirect.com', crypt('Demo@1234', gen_salt('bf')), now(), '{"provider":"email"}', '{"full_name":"Arvind Sharma (FreshRetail)","role":"bulk_buyer"}', now(), now(), '', '', '', '', '', '', '', ''),
+    (v_logistics_id, '00000000-0000-0000-0000-000000000000', 'authenticated', 'authenticated', 'logistics@kisandirect.com', crypt('Demo@1234', gen_salt('bf')), now(), '{"provider":"email"}', '{"full_name":"Vikram Singh (Kisan Express)","role":"logistics_partner"}', now(), now(), '', '', '', '', '', '', '', ''),
+    (v_admin_id, '00000000-0000-0000-0000-000000000000', 'authenticated', 'authenticated', 'admin@kisandirect.com', crypt('Demo@1234', gen_salt('bf')), now(), '{"provider":"email"}', '{"full_name":"Dr. Rajesh Verma (SIH Admin)","role":"admin"}', now(), now(), '', '', '', '', '', '', '', ''),
+    (v_consumer_id, '00000000-0000-0000-0000-000000000000', 'authenticated', 'authenticated', 'consumer@kisandirect.com', crypt('Demo@1234', gen_salt('bf')), now(), '{"provider":"email"}', '{"full_name":"Anita Deshmukh (Consumer)","role":"consumer"}', now(), now(), '', '', '', '', '', '', '', '')
   ON CONFLICT (id) DO UPDATE SET
     encrypted_password = crypt('Demo@1234', gen_salt('bf')),
-    raw_user_meta_data = EXCLUDED.raw_user_meta_data;
+    raw_user_meta_data = EXCLUDED.raw_user_meta_data,
+    confirmation_token = COALESCE(auth.users.confirmation_token, ''),
+    recovery_token = COALESCE(auth.users.recovery_token, '');
 
   -- 2. Update/Insert Profiles
   INSERT INTO public.profiles (id, full_name, email, role, phone)
