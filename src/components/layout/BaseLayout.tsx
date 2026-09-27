@@ -8,7 +8,6 @@ import {
   X,
   Zap,
   ChevronDown,
-  Globe,
 } from 'lucide-react';
 import { NotificationBell } from '../ui/NotificationBell';
 import { useAuth } from '../../features/auth/AuthContext';
@@ -33,7 +32,6 @@ export function BaseLayout() {
   const [isMobileNavOpen, setIsMobileNavOpen] = useState(false);
   const [isPersonaMenuOpen, setIsPersonaMenuOpen] = useState(false);
   const [isSwitchingPersona, setIsSwitchingPersona] = useState(false);
-  const [currentLang, setCurrentLang] = useState<'EN' | 'HI'>('EN');
 
   const handleSignOut = async () => {
     await signOut();
@@ -55,10 +53,6 @@ export function BaseLayout() {
     } finally {
       setIsSwitchingPersona(false);
     }
-  };
-
-  const toggleLanguage = () => {
-    setCurrentLang((prev) => (prev === 'EN' ? 'HI' : 'EN'));
   };
 
   // Determine if sidebar should be shown (when authenticated and inside a role dashboard/workflow)
@@ -97,7 +91,7 @@ export function BaseLayout() {
                   <span className="inline-block w-2 h-2 rounded-full bg-fresh animate-pulse" />
                 </span>
                 <span className="text-[10px] text-emerald-200/90 font-medium tracking-wide mt-0.5 hidden sm:inline">
-                  {currentLang === 'EN' ? 'From Kisan to Customer' : 'किसान से ग्राहक तक सीधा'}
+                  From Kisan to Customer
                 </span>
               </div>
             </Link>
@@ -113,7 +107,7 @@ export function BaseLayout() {
                   : 'text-emerald-100 hover:text-white hover:bg-white/10'
               }`}
             >
-              {currentLang === 'EN' ? 'Home' : 'होम'}
+              Home
             </Link>
             <Link
               to="/marketplace"
@@ -123,7 +117,7 @@ export function BaseLayout() {
                   : 'text-emerald-100 hover:text-white hover:bg-white/10'
               }`}
             >
-              {currentLang === 'EN' ? 'Marketplace' : 'मंडी / बाज़ार'}
+              Marketplace
             </Link>
             <Link
               to="/prices"
@@ -133,7 +127,7 @@ export function BaseLayout() {
                   : 'text-emerald-100 hover:text-white hover:bg-white/10'
               }`}
             >
-              {currentLang === 'EN' ? 'Prices' : 'भाव बेंचमार्क'}
+              Prices
             </Link>
             <Link
               to="/demand"
@@ -143,7 +137,7 @@ export function BaseLayout() {
                   : 'text-emerald-100 hover:text-white hover:bg-white/10'
               }`}
             >
-              {currentLang === 'EN' ? 'Demand' : 'मांग पूर्वानुमान'}
+              Demand
             </Link>
             <Link
               to="/logistics"
@@ -153,7 +147,7 @@ export function BaseLayout() {
                   : 'text-emerald-100 hover:text-white hover:bg-white/10'
               }`}
             >
-              {currentLang === 'EN' ? 'Logistics' : 'लॉजिस्टिक्स'}
+              Logistics
             </Link>
             <Link
               to="/ai-match"
@@ -163,7 +157,7 @@ export function BaseLayout() {
                   : 'text-emerald-100 hover:text-white hover:bg-white/10'
               }`}
             >
-              {currentLang === 'EN' ? 'AI Match' : 'एआई मैचिंग'}
+              AI Match
             </Link>
             <Link
               to="/about"
@@ -173,21 +167,12 @@ export function BaseLayout() {
                   : 'text-emerald-100 hover:text-white hover:bg-white/10'
               }`}
             >
-              {currentLang === 'EN' ? 'About' : 'परिचय'}
+              About
             </Link>
           </nav>
 
-          {/* Right: Controls, Demo Switcher, Language & Auth */}
+          {/* Right: Controls, Demo Switcher, & Auth */}
           <div className="flex items-center space-x-2 sm:space-x-3">
-            {/* Language Selector Pill */}
-            <button
-              onClick={toggleLanguage}
-              className="flex items-center space-x-1.5 bg-white/10 hover:bg-white/15 px-2.5 py-1.5 rounded-full border border-white/15 text-xs font-medium text-emerald-100 transition-colors cursor-pointer"
-              title="Toggle Language (English / हिंदी)"
-            >
-              <Globe className="w-3.5 h-3.5 text-emerald-300" />
-              <span className="font-bold">{currentLang === 'EN' ? 'EN | हि' : 'हि | EN'}</span>
-            </button>
 
             {/* 1-Click Role Switcher Pill for Evaluation */}
             <div className="relative">
